@@ -1,8 +1,8 @@
-# dash-drop 📊
+# dash-drop
 
-> Schema-in → Dashboard-out. In under 60 seconds.
+> Schema-in. Dashboard-out. In under 60 seconds.
 
-**dash-drop** is a zero-config admin dashboard generator. Define your data model in a single JSON config file, run `docker compose up`, and get a fully functional, production-ready CRUD dashboard with search, filtering, pagination, and API integration — no boilerplate required.
+**dash-drop** is a zero-config admin dashboard generator. Define your data model in a single JSON config file, run `docker compose up`, and get a fully functional CRUD dashboard with search, filtering, pagination, and API integration — no boilerplate required.
 
 ---
 
@@ -19,11 +19,21 @@ Most dashboard projects involve weeks of: table components, API wiring, form val
 ```bash
 git clone https://github.com/devtony42/dash-drop.git
 cd dash-drop
-cp .env.example .env
 docker compose up
 ```
 
 Open `http://localhost:3000`. That's it.
+
+---
+
+## How It Works
+
+1. Define entities in `schema.config.json`
+2. Run `docker compose up`
+3. The server reads the config, generates a Prisma schema, syncs the database, and seeds demo data
+4. The React dashboard dynamically renders tables, forms, and filters for each entity
+
+Change the config, restart, new entity appears. No code changes needed.
 
 ---
 
@@ -48,7 +58,29 @@ Edit `schema.config.json` to define your entities:
 }
 ```
 
-Restart the server → your new entity appears with full CRUD, search, and filtering. No code changes.
+Restart the server and your new entity appears with full CRUD, search, and filtering. No code changes.
+
+### Field Types
+
+| Type | Renders As | Description |
+|------|-----------|-------------|
+| `string` | Text input | Short text, supports `searchable: true` |
+| `number` | Number input | Numeric values (integers or decimals) |
+| `boolean` | Checkbox | True/false toggle |
+| `date` | Date picker | Date selection |
+| `enum` | Dropdown | Select from `options` array |
+| `text` | Textarea | Multi-line text |
+
+### Field Properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `name` | string | Field name (camelCase) |
+| `type` | string | One of the types above |
+| `required` | boolean | Validate on create |
+| `searchable` | boolean | Include in full-text search |
+| `default` | any | Default value for new records |
+| `options` | string[] | Options for `enum` type |
 
 ---
 
@@ -56,38 +88,67 @@ Restart the server → your new entity appears with full CRUD, search, and filte
 
 | Layer | Tech |
 |-------|------|
-| Frontend | React + Next.js |
+| Frontend | React 18 + Vite + Tailwind CSS |
 | Backend | Node.js + Express |
-| Database | PostgreSQL via Prisma |
-| Auth | JWT (role-based) |
+| Database | PostgreSQL 16 via Prisma |
 | Deployment | Docker Compose |
 
 ---
 
-## Field Types
+## Project Structure
 
-| Type | Description |
-|------|-------------|
-| `string` | Text input with optional search |
-| `number` | Numeric input |
-| `boolean` | Toggle / checkbox |
-| `date` | Date picker |
-| `enum` | Dropdown with defined options |
-| `text` | Multi-line textarea |
-| `list` | Repeating sub-entity |
+```
+dash-drop/
+├── client/              # React + Vite frontend
+│   ├── src/
+│   │   ├── components/  # Sidebar, EntityView, RecordForm, DeleteModal
+│   │   ├── api.js       # API client
+│   │   └── App.jsx      # Main app shell
+│   └── Dockerfile
+├── server/              # Express API
+│   ├── src/
+│   │   ├── index.js         # API server with dynamic CRUD routes
+│   │   ├── generate-prisma.js  # Schema config to Prisma schema generator
+│   │   └── seed.js          # Demo data seeder
+│   ├── entrypoint.sh    # Docker startup script
+│   └── Dockerfile
+├── prisma/              # Generated Prisma schema (gitignored)
+├── docs/                # GitHub Pages site
+├── docker-compose.yml
+├── schema.config.json   # Your entity definitions
+└── .env.example
+```
 
 ---
 
-## Roadmap
+## API
 
-- [x] Schema-driven entity definitions
-- [ ] Core CRUD frontend (React + Next.js)
-- [ ] Express REST API with Prisma
-- [ ] Docker Compose setup
-- [ ] Role-based access control
-- [ ] Industry templates (construction, finance, CRM)
-- [ ] Stripe / external API integration hooks
-- [ ] GitHub Pages live demo
+Each entity gets automatic REST endpoints:
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/{entity}` | List with pagination, search, sort, filter |
+| `GET` | `/api/{entity}/:id` | Get single record |
+| `POST` | `/api/{entity}` | Create record |
+| `PUT` | `/api/{entity}/:id` | Update record |
+| `DELETE` | `/api/{entity}/:id` | Delete record |
+| `GET` | `/api/schema` | Get schema config (used by frontend) |
+
+### Query Parameters
+
+- `page` — Page number (default: 1)
+- `limit` — Records per page (default: 10, max: 100)
+- `search` — Full-text search across searchable fields
+- `sortBy` — Field to sort by (default: id)
+- `sortOrder` — `asc` or `desc` (default: desc)
+- `filter_{fieldName}` — Filter by specific field value
+
+---
+
+## Screenshots
+
+<!-- Screenshots will be added after first deployment -->
+*Coming soon*
 
 ---
 
@@ -97,7 +158,21 @@ Restart the server → your new entity appears with full CRUD, search, and filte
 - Financial analytics panels
 - E-commerce admin backends
 - Case management systems (nonprofits, childcare)
-- Any client project that needs data → UI fast
+- Any client project that needs data to UI fast
+
+---
+
+## Roadmap
+
+- [x] Schema-driven entity definitions
+- [x] Core CRUD frontend (React + Vite)
+- [x] Express REST API with Prisma
+- [x] Docker Compose setup
+- [x] Dark/light mode
+- [ ] Role-based access control
+- [ ] Industry templates (construction, finance, CRM)
+- [ ] Stripe / external API integration hooks
+- [ ] GitHub Pages live demo
 
 ---
 
@@ -107,4 +182,4 @@ MIT — use it, sell it, build on it.
 
 ---
 
-*Built by [Tony Goggin](https://tonygoggin.com) · Powered by Ada 🦉*
+*Built by [Tony Goggin](https://tonygoggin.com) · Powered by Ada*

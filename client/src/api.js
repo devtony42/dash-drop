@@ -1,0 +1,56 @@
+const BASE = "/api";
+
+export async function fetchSchema() {
+  const res = await fetch(`${BASE}/schema`);
+  return res.json();
+}
+
+export async function fetchRecords(entityName, params = {}) {
+  const query = new URLSearchParams();
+  for (const [key, val] of Object.entries(params)) {
+    if (val !== undefined && val !== null && val !== "") {
+      query.set(key, val);
+    }
+  }
+  const res = await fetch(`${BASE}/${entityName.toLowerCase()}?${query}`);
+  return res.json();
+}
+
+export async function fetchRecord(entityName, id) {
+  const res = await fetch(`${BASE}/${entityName.toLowerCase()}/${id}`);
+  return res.json();
+}
+
+export async function createRecord(entityName, data) {
+  const res = await fetch(`${BASE}/${entityName.toLowerCase()}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.errors?.join(", ") || err.error || "Create failed");
+  }
+  return res.json();
+}
+
+export async function updateRecord(entityName, id, data) {
+  const res = await fetch(`${BASE}/${entityName.toLowerCase()}/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.errors?.join(", ") || err.error || "Update failed");
+  }
+  return res.json();
+}
+
+export async function deleteRecord(entityName, id) {
+  const res = await fetch(`${BASE}/${entityName.toLowerCase()}/${id}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("Delete failed");
+  return res.json();
+}
