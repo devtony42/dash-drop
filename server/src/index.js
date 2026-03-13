@@ -70,6 +70,75 @@ for (const entity of schemaConfig.entities) {
   const accessor = modelName.charAt(0).toLowerCase() + modelName.slice(1);
   const basePath = `/api/${modelName.toLowerCase()}`;
 
+  // GET export — CSV download with same filters (no pagination)
+  app.get(`${basePath}/export`, async (req, res) => {
+    try {
+      const search = req.query.search || "";
+      const sortBy = req.query.sortBy || "id";
+      const sortOrder = req.query.sortOrder === "asc" ? "asc" : "desc";
+
+      const where = {};
+
+      // Full-text search across searchable string fields
+      if (search) {
+        const searchFields = entity.fields
+          .filter((f) => f.searchable && (f.type === "string" || f.type === "text"))
+          .map((f) => ({ [f.name]: { contains: search, mode: "insensitive" } }));
+        if (searchFields.length > 0) {
+          where.OR = searchFields;
+        }
+      }
+
+      // Field-specific filters from query params
+      for (const field of entity.fields) {
+        if (field.type === "list") continue;
+        const filterVal = req.query[`filter_${field.name}`];
+        if (filterVal === undefined || filterVal === "") continue;
+
+        if (field.type === "boolean") {
+          where[field.name] = filterVal === "true";
+        } else if (field.type === "enum") {
+          where[field.name] = filterVal;
+        } else if (field.type === "number") {
+          where[field.name] = parseFloat(filterVal);
+        }
+      }
+
+      const data = await prisma[accessor].findMany({
+        where,
+        orderBy: { [sortBy]: sortOrder },
+      });
+
+      // Build CSV with RFC-4180 escaping
+      const fieldNames = entity.fields.filter((f) => f.type !== "list").map((f) => f.name);
+      const columns = ["id", ...fieldNames];
+
+      const escapeCsv = (val) => {
+        if (val === null || val === undefined) return "";
+        if (typeof val === "boolean") return val ? "true" : "false";
+        if (val instanceof Date) return val.toISOString();
+        if (typeof val === "number") return String(val);
+        const str = String(val);
+        if (str.includes(",") || str.includes("\n") || str.includes('"')) {
+          return '"' + str.replace(/"/g, '""') + '"';
+        }
+        return str;
+      };
+
+      const header = columns.join(",");
+      const rows = data.map((record) => columns.map((col) => escapeCsv(record[col])).join(","));
+      const csv = [header, ...rows].join("\n");
+
+      const today = new Date().toISOString().slice(0, 10);
+      res.setHeader("Content-Type", "text/csv");
+      res.setHeader("Content-Disposition", `attachment; filename="${modelName}-export-${today}.csv"`);
+      res.send(csv);
+    } catch (err) {
+      console.error(`GET ${basePath}/export error:`, err);
+      res.status(500).json({ error: "Failed to export records" });
+    }
+  });
+
   // GET list — pagination, search, sorting, filtering
   app.get(basePath, async (req, res) => {
     try {

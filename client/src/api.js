@@ -54,3 +54,23 @@ export async function deleteRecord(entityName, id) {
   if (!res.ok) throw new Error("Delete failed");
   return res.json();
 }
+
+export async function exportRecords(entityName, params = {}) {
+  const query = new URLSearchParams();
+  for (const [key, val] of Object.entries(params)) {
+    if (val !== undefined && val !== null && val !== "") {
+      query.set(key, val);
+    }
+  }
+  const res = await fetch(`${BASE}/${entityName.toLowerCase()}/export?${query}`);
+  if (!res.ok) throw new Error("Export failed");
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${entityName}-export.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
