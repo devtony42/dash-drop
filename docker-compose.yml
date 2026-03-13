@@ -1,0 +1,43 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: dashdrop
+      POSTGRES_PASSWORD: dashdrop
+      POSTGRES_DB: dashdrop
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dashdrop"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+
+  server:
+    build: ./server
+    ports:
+      - "3001:3001"
+    environment:
+      DATABASE_URL: postgresql://dashdrop:dashdrop@postgres:5432/dashdrop
+      PORT: "3001"
+      SCHEMA_PATH: /app/schema.config.json
+    volumes:
+      - ./schema.config.json:/app/schema.config.json:ro
+      - ./prisma:/app/prisma
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  client:
+    build: ./client
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_API_URL: http://server:3001
+    depends_on:
+      - server
+
+volumes:
+  pgdata:
