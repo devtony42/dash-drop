@@ -1,0 +1,24 @@
+{
+  "entities": [
+    {
+      "name": "Product",
+      "fields": [
+        { "name": "name", "type": "string", "required": true, "searchable": true },
+        { "name": "price", "type": "number", "required": true },
+        { "name": "category", "type": "enum", "options": ["Electronics", "Clothing", "Food"] },
+        { "name": "inStock", "type": "boolean", "default": true },
+        { "name": "description", "type": "text" }
+      ]
+    },
+    {
+      "name": "Order",
+      "fields": [
+        { "name": "customerName", "type": "string", "required": true, "searchable": true },
+        { "name": "orderDate", "type": "date", "required": true },
+        { "name": "total", "type": "number", "required": true },
+        { "name": "status", "type": "enum", "options": ["Pending", "Shipped", "Delivered", "Cancelled"] },
+        { "name": "notes", "type": "text" }
+      ]
+    }
+  ]
+}

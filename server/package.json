@@ -1,0 +1,19 @@
+{
+  "name": "dash-drop-server",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js",
+    "generate": "node src/generate-prisma.js",
+    "db:migrate": "npx prisma migrate deploy",
+    "db:push": "npx prisma db push --skip-generate",
+    "seed": "node src/seed.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.20.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "prisma": "^5.20.0"
+  }
+}
