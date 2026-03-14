@@ -1,19 +1,26 @@
 {
-  "name": "dash-drop-server",
+  "name": "crud-dashboard-server",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "node --watch src/index.js",
     "start": "node src/index.js",
-    "generate": "node src/generate-prisma.js",
-    "db:migrate": "npx prisma migrate deploy",
-    "db:push": "npx prisma db push --skip-generate",
-    "seed": "node src/seed.js"
+    "generate-prisma": "node src/generate-prisma.js",
+    "db:migrate": "npx prisma migrate dev --name init",
+    "db:push": "npx prisma db push",
+    "db:seed": "node src/seed.js",
+    "setup": "node src/generate-prisma.js && npx prisma generate && npx prisma db push && node src/seed.js"
   },
   "dependencies": {
-    "@prisma/client": "^5.20.0",
+    "@prisma/client": "^6.4.1",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
-    "express": "^4.21.0",
-    "prisma": "^5.20.0"
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "json2csv": "^6.0.0-alpha.2"
+  },
+  "devDependencies": {
+    "prisma": "^6.4.1"
   }
 }
