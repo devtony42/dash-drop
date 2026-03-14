@@ -1,10 +1,4 @@
 node_modules/
 .env
-.env.local
 dist/
-build/
-.next/
-*.log
 .DS_Store
-prisma/schema.prisma
-prisma/migrations/

@@ -2,21 +2,25 @@
   "entities": [
     {
       "name": "Product",
+      "icon": "Package",
       "fields": [
         { "name": "name", "type": "string", "required": true, "searchable": true },
+        { "name": "sku", "type": "string", "required": true, "searchable": true },
         { "name": "price", "type": "number", "required": true },
-        { "name": "category", "type": "enum", "options": ["Electronics", "Clothing", "Food"] },
+        { "name": "category", "type": "enum", "options": ["Electronics", "Clothing", "Food", "Home", "Sports"], "required": true },
         { "name": "inStock", "type": "boolean", "default": true },
         { "name": "description", "type": "text" }
       ]
     },
     {
       "name": "Order",
+      "icon": "ShoppingCart",
       "fields": [
+        { "name": "orderNumber", "type": "string", "required": true, "searchable": true },
         { "name": "customerName", "type": "string", "required": true, "searchable": true },
-        { "name": "orderDate", "type": "date", "required": true },
-        { "name": "total", "type": "number", "required": true },
-        { "name": "status", "type": "enum", "options": ["Pending", "Shipped", "Delivered", "Cancelled"] },
+        { "name": "customerEmail", "type": "string", "required": true, "searchable": true },
+        { "name": "status", "type": "enum", "options": ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"], "required": true },
+        { "name": "totalAmount", "type": "number", "required": true },
         { "name": "notes", "type": "text" }
       ]
     }
