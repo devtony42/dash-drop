@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { fetchRecords, createRecord, updateRecord, deleteRecord, exportRecords } from "../api.js";
 import RecordForm from "./RecordForm.jsx";
 import DeleteModal from "./DeleteModal.jsx";
@@ -13,6 +13,39 @@ export default function EntityView({ entity }) {
   const [loading, setLoading] = useState(true);
 
   const [exporting, setExporting] = useState(false);
+
+  // Column visibility
+  const storageKey = `dash-drop-columns-${entity.name}`;
+  const [hiddenColumns, setHiddenColumns] = useState(() => {
+    try {
+      const saved = localStorage.getItem(storageKey);
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
+  const [columnsOpen, setColumnsOpen] = useState(false);
+  const columnsRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (columnsRef.current && !columnsRef.current.contains(e.target)) {
+        setColumnsOpen(false);
+      }
+    };
+    if (columnsOpen) document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [columnsOpen]);
+
+  const toggleColumn = (fieldName) => {
+    setHiddenColumns((prev) => {
+      const next = new Set(prev);
+      if (next.has(fieldName)) next.delete(fieldName);
+      else next.add(fieldName);
+      localStorage.setItem(storageKey, JSON.stringify([...next]));
+      return next;
+    });
+  };
 
   // Modal state
   const [formOpen, setFormOpen] = useState(false);
@@ -166,6 +199,36 @@ export default function EntityView({ entity }) {
             </select>
           ))}
 
+        <div ref={columnsRef} className="relative">
+          <button
+            onClick={() => setColumnsOpen((o) => !o)}
+            className="px-4 py-2 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg text-sm font-medium transition-colors flex items-center gap-1 whitespace-nowrap"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7" />
+            </svg>
+            Columns ▾
+          </button>
+          {columnsOpen && (
+            <div className="absolute right-0 z-20 mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg py-1">
+              {visibleFields.map((f) => (
+                <label
+                  key={f.name}
+                  className="flex items-center gap-2 px-3 py-1.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer select-none"
+                >
+                  <input
+                    type="checkbox"
+                    checked={!hiddenColumns.has(f.name)}
+                    onChange={() => toggleColumn(f.name)}
+                    className="rounded border-gray-300 dark:border-gray-600 text-brand-500 focus:ring-brand-500"
+                  />
+                  {f.name}
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+
         <button
           onClick={handleExport}
           disabled={exporting}
@@ -200,7 +263,7 @@ export default function EntityView({ entity }) {
                 >
                   ID {sortBy === "id" && (sortOrder === "asc" ? "\u2191" : "\u2193")}
                 </th>
-                {visibleFields.map((f) => (
+                {visibleFields.filter((f) => !hiddenColumns.has(f.name)).map((f) => (
                   <th
                     key={f.name}
                     onClick={() => handleSort(f.name)}
@@ -217,13 +280,13 @@ export default function EntityView({ entity }) {
             <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
               {loading ? (
                 <tr>
-                  <td colSpan={visibleFields.length + 2} className="px-4 py-12 text-center text-gray-400">
+                  <td colSpan={visibleFields.filter((f) => !hiddenColumns.has(f.name)).length + 2} className="px-4 py-12 text-center text-gray-400">
                     Loading...
                   </td>
                 </tr>
               ) : records.length === 0 ? (
                 <tr>
-                  <td colSpan={visibleFields.length + 2} className="px-4 py-12 text-center text-gray-400">
+                  <td colSpan={visibleFields.filter((f) => !hiddenColumns.has(f.name)).length + 2} className="px-4 py-12 text-center text-gray-400">
                     No records found
                   </td>
                 </tr>
@@ -231,7 +294,7 @@ export default function EntityView({ entity }) {
                 records.map((record) => (
                   <tr key={record.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                     <td className="px-4 py-3 text-gray-400 font-mono text-xs">{record.id}</td>
-                    {visibleFields.map((f) => (
+                    {visibleFields.filter((f) => !hiddenColumns.has(f.name)).map((f) => (
                       <td key={f.name} className="px-4 py-3">
                         {formatValue(record[f.name], f)}
                       </td>
