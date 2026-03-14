@@ -34,10 +34,10 @@
 - State saved to localStorage per entity
 - Useful for entities with many fields
 
-#### Inline Validation Messages
+#### Inline Validation Messages ✅ Done
 - Surface server-side validation errors inline on form fields (red border + message)
-- Client-side: mark required fields visually, validate before submit
-- Currently errors only appear as a generic toast
+- Client-side: mark required fields visually with red asterisk
+- Server errors parsed per-field from `{ errors: [...] }` response
 
 #### Read-Only Entity Mode
 - `"readOnly": true` flag in schema entity definition

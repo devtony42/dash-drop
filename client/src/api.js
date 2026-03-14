@@ -28,8 +28,11 @@ export async function createRecord(entityName, data) {
     body: JSON.stringify(data),
   });
   if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.errors?.join(", ") || err.error || "Create failed");
+    const data = await res.json();
+    if (res.status === 400 && data.errors) {
+      throw Object.assign(new Error("Validation failed"), { validationErrors: data.errors });
+    }
+    throw new Error(data.error || "Create failed");
   }
   return res.json();
 }
@@ -41,8 +44,11 @@ export async function updateRecord(entityName, id, data) {
     body: JSON.stringify(data),
   });
   if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.errors?.join(", ") || err.error || "Update failed");
+    const data = await res.json();
+    if (res.status === 400 && data.errors) {
+      throw Object.assign(new Error("Validation failed"), { validationErrors: data.errors });
+    }
+    throw new Error(data.error || "Update failed");
   }
   return res.json();
 }

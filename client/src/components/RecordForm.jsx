@@ -23,6 +23,7 @@ export default function RecordForm({ entity, record, onSubmit, onClose }) {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const handleChange = (name, value) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -32,10 +33,20 @@ export default function RecordForm({ entity, record, onSubmit, onClose }) {
     e.preventDefault();
     setSubmitting(true);
     setError(null);
+    setFieldErrors({});
     try {
       await onSubmit(formData);
     } catch (err) {
-      setError(err.message);
+      if (err.validationErrors) {
+        const parsed = {};
+        for (const msg of err.validationErrors) {
+          const fieldName = msg.split(" ")[0];
+          parsed[fieldName] = msg;
+        }
+        setFieldErrors(parsed);
+      } else {
+        setError(err.message);
+      }
     } finally {
       setSubmitting(false);
     }
@@ -43,8 +54,12 @@ export default function RecordForm({ entity, record, onSubmit, onClose }) {
 
   const renderField = (field) => {
     const value = formData[field.name];
+    const hasError = !!fieldErrors[field.name];
+    const borderClass = hasError
+      ? "border-red-500 dark:border-red-500"
+      : "border-gray-200 dark:border-gray-700";
     const baseClass =
-      "w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent";
+      `w-full px-3 py-2 rounded-lg border ${borderClass} bg-white dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent`;
 
     switch (field.type) {
       case "text":
@@ -156,6 +171,11 @@ export default function RecordForm({ entity, record, onSubmit, onClose }) {
                 {field.required && <span className="text-red-500 ml-1">*</span>}
               </label>
               {renderField(field)}
+              {fieldErrors[field.name] && (
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                  {fieldErrors[field.name]}
+                </p>
+              )}
             </div>
           ))}
 
