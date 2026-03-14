@@ -29,7 +29,7 @@
 - Proper Content-Disposition header, RFC-4180 compliant output
 - Handles all field types (dates formatted, booleans as True/False)
 
-#### Column Visibility Toggle
+#### Column Visibility Toggle ✅ Done
 - User can show/hide columns from the table
 - State saved to localStorage per entity
 - Useful for entities with many fields
