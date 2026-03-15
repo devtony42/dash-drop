@@ -73,7 +73,7 @@ export const api = {
 
   exportCsv: (entityName, params) => {
     const slug = entityName.charAt(0).toLowerCase() + entityName.slice(1) + 's';
-    const qs = new URLSearchParams({ ...params, format: 'csv' }).toString();
-    return request(`/${slug}?${qs}`);
+    const qs = new URLSearchParams(params).toString();
+    return request(`/${slug}/export?${qs}`);
   },
 };
