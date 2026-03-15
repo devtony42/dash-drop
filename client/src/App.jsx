@@ -79,7 +79,7 @@ export default function App() {
           <ThemeToggle />
         </header>
 
-        {entity && <EntityView key={activeEntity} entity={entity} />}
+        {entity && <EntityView key={activeEntity} entity={entity} readOnly={!!entity.readOnly} />}
       </main>
     </div>
   );

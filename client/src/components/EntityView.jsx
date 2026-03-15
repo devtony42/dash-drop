@@ -3,7 +3,7 @@ import { fetchRecords, createRecord, updateRecord, deleteRecord, exportRecords }
 import RecordForm from "./RecordForm.jsx";
 import DeleteModal from "./DeleteModal.jsx";
 
-export default function EntityView({ entity }) {
+export default function EntityView({ entity, readOnly }) {
   const [records, setRecords] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, totalPages: 0 });
   const [search, setSearch] = useState("");
@@ -177,15 +177,17 @@ export default function EntityView({ entity }) {
           {exporting ? "Exporting..." : "Export CSV"}
         </button>
 
-        <button
-          onClick={() => { setEditRecord(null); setFormOpen(true); }}
-          className="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-1 whitespace-nowrap"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-          Add {entity.name}
-        </button>
+        {!readOnly && (
+          <button
+            onClick={() => { setEditRecord(null); setFormOpen(true); }}
+            className="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-1 whitespace-nowrap"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Add {entity.name}
+          </button>
+        )}
       </div>
 
       {/* Table */}
@@ -209,21 +211,23 @@ export default function EntityView({ entity }) {
                     {f.name} {sortBy === f.name && (sortOrder === "asc" ? "\u2191" : "\u2193")}
                   </th>
                 ))}
-                <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
+                {!readOnly && (
+                  <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
+                )}
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
               {loading ? (
                 <tr>
-                  <td colSpan={visibleFields.length + 2} className="px-4 py-12 text-center text-gray-400">
+                  <td colSpan={visibleFields.length + (readOnly ? 1 : 2)} className="px-4 py-12 text-center text-gray-400">
                     Loading...
                   </td>
                 </tr>
               ) : records.length === 0 ? (
                 <tr>
-                  <td colSpan={visibleFields.length + 2} className="px-4 py-12 text-center text-gray-400">
+                  <td colSpan={visibleFields.length + (readOnly ? 1 : 2)} className="px-4 py-12 text-center text-gray-400">
                     No records found
                   </td>
                 </tr>
@@ -236,20 +240,22 @@ export default function EntityView({ entity }) {
                         {formatValue(record[f.name], f)}
                       </td>
                     ))}
-                    <td className="px-4 py-3 text-right space-x-1">
-                      <button
-                        onClick={() => { setEditRecord(record); setFormOpen(true); }}
-                        className="inline-flex px-2 py-1 text-xs rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-brand-500 transition-colors"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => setDeleteTarget(record)}
-                        className="inline-flex px-2 py-1 text-xs rounded hover:bg-red-50 dark:hover:bg-red-950 text-red-500 transition-colors"
-                      >
-                        Delete
-                      </button>
-                    </td>
+                    {!readOnly && (
+                      <td className="px-4 py-3 text-right space-x-1">
+                        <button
+                          onClick={() => { setEditRecord(record); setFormOpen(true); }}
+                          className="inline-flex px-2 py-1 text-xs rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-brand-500 transition-colors"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => setDeleteTarget(record)}
+                          className="inline-flex px-2 py-1 text-xs rounded hover:bg-red-50 dark:hover:bg-red-950 text-red-500 transition-colors"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    )}
                   </tr>
                 ))
               )}
@@ -287,7 +293,7 @@ export default function EntityView({ entity }) {
       </div>
 
       {/* Create/Edit Modal */}
-      {formOpen && (
+      {!readOnly && formOpen && (
         <RecordForm
           entity={entity}
           record={editRecord}
@@ -297,7 +303,7 @@ export default function EntityView({ entity }) {
       )}
 
       {/* Delete Modal */}
-      {deleteTarget && (
+      {!readOnly && deleteTarget && (
         <DeleteModal
           entityName={entity.name}
           record={deleteTarget}

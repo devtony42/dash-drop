@@ -19,6 +19,15 @@
         { "name": "status", "type": "enum", "options": ["Pending", "Shipped", "Delivered", "Cancelled"] },
         { "name": "notes", "type": "text" }
       ]
+    },
+    {
+      "name": "auditLog",
+      "readOnly": true,
+      "fields": [
+        { "name": "action", "type": "string", "searchable": true },
+        { "name": "timestamp", "type": "date" },
+        { "name": "userId", "type": "number" }
+      ]
     }
   ]
 }
