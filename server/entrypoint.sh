@@ -2,13 +2,13 @@
 set -e
 
 echo "==> Generating Prisma schema from schema.config.json..."
-node src/generate-prisma.js
+PRISMA_SCHEMA_PATH=/app/prisma/schema.prisma node src/generate-prisma.js
 
 echo "==> Generating Prisma client..."
-npx prisma generate
+npx prisma generate --schema=/app/prisma/schema.prisma
 
 echo "==> Waiting for database..."
-until npx prisma db push --accept-data-loss 2>/dev/null; do
+until npx prisma db push --schema=/app/prisma/schema.prisma --accept-data-loss 2>/dev/null; do
   echo "    Database not ready, retrying in 2s..."
   sleep 2
 done
