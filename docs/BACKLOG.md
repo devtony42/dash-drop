@@ -15,7 +15,7 @@
 | 5 | Column visibility toggle | Done | Per-entity localStorage persistence |
 | 6 | Inline validation messages | Done | Client-side required + server error mapping |
 | 7 | Read-only entity mode | Done | `readOnly: true` schema flag hides CRUD buttons |
-| 8 | JWT auth + RBAC | In progress | Login, Admin/Editor/Viewer roles, protected routes |
+| 8 | JWT auth + RBAC | Done | Login, Admin/Editor/Viewer roles, protected routes, role-aware UI |
 | 9 | Industry templates | Backlog | See below |
 | 10 | Stripe / external API integration hooks | Backlog | See below |
 | 11 | Live demo on Render/Railway | Backlog | See below |
@@ -51,7 +51,7 @@
 
 ### Medium Lift (1–3 days each)
 
-#### Role-Based Access Control (RBAC) — IN PROGRESS
+#### Role-Based Access Control (RBAC) — DONE
 - JWT-based authentication with bcrypt passwords
 - Three roles: Admin (full access), Editor (read + write), Viewer (read-only)
 - Login page with demo credentials
