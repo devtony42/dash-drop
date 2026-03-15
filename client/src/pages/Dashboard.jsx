@@ -52,7 +52,7 @@ export default function Dashboard() {
           const path = `/${entity.name.toLowerCase()}s`;
           return (
             <Link key={entity.name} to={path}>
-              <Card className="transition-colors hover:bg-accent/50">
+              <Card className="h-full transition-colors hover:bg-accent/50 cursor-pointer">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
                     {entity.name}s
@@ -72,7 +72,8 @@ export default function Dashboard() {
           );
         })}
 
-        <Card>
+        {/* Your Role card — always last in the grid, fills naturally */}
+        <Card className="h-full">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
               Your Role
@@ -80,9 +81,9 @@ export default function Dashboard() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{user?.role}</div>
+            <div className="text-2xl font-bold capitalize">{user?.role}</div>
             <p className="text-xs text-muted-foreground mt-1">
-              {user?.role === 'Admin' ? 'Full access' : user?.role === 'Editor' ? 'Can create and edit' : 'Read only'}
+              {user?.role === 'admin' ? 'Full access' : user?.role === 'editor' ? 'Can create and edit' : 'Read only'}
             </p>
           </CardContent>
         </Card>

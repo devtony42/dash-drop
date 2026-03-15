@@ -44,16 +44,16 @@ export default function Layout({ children }) {
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 transform bg-card border-r transition-transform duration-200 ease-in-out lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 transform bg-card border-r transition-transform duration-200 ease-in-out lg:translate-x-0 flex flex-col ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex h-16 items-center gap-2 border-b px-6">
+        <div className="flex h-16 items-center gap-2 border-b px-6 shrink-0">
           <LayoutDashboard className="h-6 w-6 text-primary" />
-          <span className="text-lg font-bold">Dashboard</span>
+          <span className="text-lg font-bold">dash-drop</span>
         </div>
 
-        <nav className="flex-1 space-y-1 p-4">
+        <nav className="flex-1 space-y-1 p-4 overflow-y-auto">
           <Link
             to="/"
             className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
@@ -89,7 +89,7 @@ export default function Layout({ children }) {
           })}
         </nav>
 
-        <div className="border-t p-4">
+        <div className="border-t p-4 shrink-0">
           <div className="flex items-center gap-3 px-3 py-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">
               {user?.name?.charAt(0)?.toUpperCase()}
@@ -115,15 +115,23 @@ export default function Layout({ children }) {
             <Menu className="h-5 w-5" />
           </Button>
 
+          {/* App name — visible on mobile/tablet only */}
+          <div className="flex items-center gap-2 lg:hidden">
+            <LayoutDashboard className="h-5 w-5 text-primary" />
+            <span className="text-sm font-bold">dash-drop</span>
+          </div>
+
           <div className="flex-1" />
 
-          <Button variant="ghost" size="icon" onClick={toggle}>
-            {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </Button>
+          <div className="flex items-center gap-1">
+            <Button variant="ghost" size="icon" title={dark ? 'Switch to light mode' : 'Switch to dark mode'} onClick={toggle}>
+              {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </Button>
 
-          <Button variant="ghost" size="icon" onClick={handleLogout}>
-            <LogOut className="h-5 w-5" />
-          </Button>
+            <Button variant="ghost" size="icon" title="Log out" onClick={handleLogout}>
+              <LogOut className="h-5 w-5" />
+            </Button>
+          </div>
         </header>
 
         {/* Page content */}
