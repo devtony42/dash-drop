@@ -11,7 +11,7 @@
 | 1 | Core CRUD frontend (React + Vite) | ✅ Done | Dynamic table, forms, search, filters, pagination |
 | 2 | Express REST API with Prisma | ✅ Done | Auto-generated routes per entity, coercion, validation |
 | 3 | Docker Compose full-stack wiring | ✅ Done | Postgres + API + client, one-command startup |
-| 4 | CSV export | 🔄 In progress | Per-entity export respecting current filters/search |
+| 4 | CSV export | ✅ Done | PR #1 merged |
 | 5 | Role-based access control | ⬜ Backlog | See below |
 | 6 | Industry templates | ⬜ Backlog | See below |
 | 7 | Stripe / external API integration hooks | ⬜ Backlog | See below |
@@ -29,17 +29,17 @@
 - Proper Content-Disposition header, RFC-4180 compliant output
 - Handles all field types (dates formatted, booleans as True/False)
 
-#### Column Visibility Toggle
+#### Column Visibility Toggle ← PR #2 OPEN
 - User can show/hide columns from the table
 - State saved to localStorage per entity
 - Useful for entities with many fields
 
-#### Inline Validation Messages
+#### Inline Validation Messages ← PR #3 OPEN
 - Surface server-side validation errors inline on form fields (red border + message)
 - Client-side: mark required fields visually, validate before submit
 - Currently errors only appear as a generic toast
 
-#### Read-Only Entity Mode
+#### Read-Only Entity Mode ← PR #4 OPEN
 - `"readOnly": true` flag in schema entity definition
 - Hides Add/Edit/Delete buttons for that entity
 - Useful for audit logs, imported data, reference tables
