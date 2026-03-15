@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 // Load schema config
-const configPath = path.resolve(__dirname, '../../schema.config.json');
+const configPath = process.env.SCHEMA_PATH || path.resolve(__dirname, '../../schema.config.json');
 const schemaConfig = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
 
 // Health check

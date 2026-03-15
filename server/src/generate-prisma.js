@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const configPath = path.resolve(__dirname, '../../schema.config.json');
-const prismaPath = path.resolve(__dirname, '../../prisma/schema.prisma');
+const configPath = process.env.SCHEMA_PATH || path.resolve(__dirname, '../../schema.config.json');
+const prismaPath = process.env.PRISMA_SCHEMA_PATH || path.resolve(__dirname, '../../prisma/schema.prisma');
 
 function fieldTypeToPrisma(field) {
   const mapping = {
