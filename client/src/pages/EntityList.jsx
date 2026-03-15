@@ -12,11 +12,13 @@ import {
 import EntityForm from '@/components/EntityForm';
 import {
   Plus, Search, Download, Pencil, Trash2, ChevronLeft, ChevronRight,
-  ArrowUpDown, ArrowUp, ArrowDown, X,
+  ArrowUpDown, ArrowUp, ArrowDown, X, Columns3,
 } from 'lucide-react';
 
 export default function EntityList({ entity }) {
-  const { canEdit, canDelete } = useAuth();
+  const { canEdit: roleCanEdit, canDelete: roleCanDelete } = useAuth();
+  const canEdit = roleCanEdit && !entity.readOnly;
+  const canDelete = roleCanDelete && !entity.readOnly;
   const [data, setData] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, totalPages: 0 });
   const [search, setSearch] = useState('');
@@ -25,6 +27,45 @@ export default function EntityList({ entity }) {
   const [sortOrder, setSortOrder] = useState('desc');
   const [loading, setLoading] = useState(true);
   const [formLoading, setFormLoading] = useState(false);
+  const [exporting, setExporting] = useState(false);
+
+  // Column visibility — persisted per entity in localStorage
+  const colsKey = `dash-drop-cols-${entity.name}`;
+  const [visibleCols, setVisibleCols] = useState(() => {
+    try {
+      const saved = localStorage.getItem(colsKey);
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return entity.fields.map(f => f.name);
+  });
+  const [showColsPanel, setShowColsPanel] = useState(false);
+
+  // Reset column visibility when entity changes
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(`dash-drop-cols-${entity.name}`);
+      if (saved) {
+        setVisibleCols(JSON.parse(saved));
+      } else {
+        setVisibleCols(entity.fields.map(f => f.name));
+      }
+    } catch {
+      setVisibleCols(entity.fields.map(f => f.name));
+    }
+    setShowColsPanel(false);
+  }, [entity.name]);
+
+  const toggleColumn = (fieldName) => {
+    setVisibleCols(prev => {
+      const next = prev.includes(fieldName)
+        ? prev.filter(n => n !== fieldName)
+        : [...prev, fieldName];
+      localStorage.setItem(colsKey, JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const displayFields = entity.fields.filter(f => visibleCols.includes(f.name));
 
   // Dialogs
   const [showCreate, setShowCreate] = useState(false);
@@ -92,8 +133,6 @@ export default function EntityList({ entity }) {
       await api.createEntity(entity.name, formData);
       setShowCreate(false);
       fetchData();
-    } catch (err) {
-      alert(err.message);
     } finally {
       setFormLoading(false);
     }
@@ -105,8 +144,6 @@ export default function EntityList({ entity }) {
       await api.updateEntity(entity.name, editItem.id, formData);
       setEditItem(null);
       fetchData();
-    } catch (err) {
-      alert(err.message);
     } finally {
       setFormLoading(false);
     }
@@ -123,6 +160,7 @@ export default function EntityList({ entity }) {
   };
 
   const handleExport = async () => {
+    setExporting(true);
     try {
       const params = { sortBy, sortOrder };
       if (search) params.search = search;
@@ -138,6 +176,8 @@ export default function EntityList({ entity }) {
       URL.revokeObjectURL(url);
     } catch (err) {
       alert('Export failed: ' + err.message);
+    } finally {
+      setExporting(false);
     }
   };
 
@@ -181,9 +221,30 @@ export default function EntityList({ entity }) {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={handleExport}>
+          <div className="relative">
+            <Button variant="outline" size="sm" onClick={() => setShowColsPanel(p => !p)}>
+              <Columns3 className="mr-2 h-4 w-4" />
+              Columns
+            </Button>
+            {showColsPanel && (
+              <div className="absolute right-0 top-full z-20 mt-1 w-52 rounded-md border bg-popover p-2 shadow-md">
+                {entity.fields.map(f => (
+                  <label key={f.name} className="flex items-center gap-2 rounded px-2 py-1.5 text-sm hover:bg-muted cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={visibleCols.includes(f.name)}
+                      onChange={() => toggleColumn(f.name)}
+                      className="h-4 w-4 rounded border-input"
+                    />
+                    {f.name.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())}
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
+          <Button variant="outline" size="sm" onClick={handleExport} disabled={exporting}>
             <Download className="mr-2 h-4 w-4" />
-            Export CSV
+            {exporting ? 'Exporting...' : 'Export CSV'}
           </Button>
           {canEdit && (
             <Button size="sm" onClick={() => setShowCreate(true)}>
@@ -243,7 +304,7 @@ export default function EntityList({ entity }) {
                     ID <SortIcon field="id" />
                   </button>
                 </th>
-                {entity.fields.map(field => (
+                {displayFields.map(field => (
                   <th key={field.name} className="px-4 py-3 text-left font-medium text-muted-foreground">
                     <button
                       onClick={() => handleSort(field.name)}
@@ -262,13 +323,13 @@ export default function EntityList({ entity }) {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={entity.fields.length + 2} className="px-4 py-8 text-center text-muted-foreground">
+                  <td colSpan={displayFields.length + 2} className="px-4 py-8 text-center text-muted-foreground">
                     Loading...
                   </td>
                 </tr>
               ) : data.length === 0 ? (
                 <tr>
-                  <td colSpan={entity.fields.length + 2} className="px-4 py-8 text-center text-muted-foreground">
+                  <td colSpan={displayFields.length + 2} className="px-4 py-8 text-center text-muted-foreground">
                     No {entity.name.toLowerCase()}s found.
                   </td>
                 </tr>
@@ -276,7 +337,7 @@ export default function EntityList({ entity }) {
                 data.map(item => (
                   <tr key={item.id} className="border-b transition-colors hover:bg-muted/50">
                     <td className="px-4 py-3 text-muted-foreground">{item.id}</td>
-                    {entity.fields.map(field => (
+                    {displayFields.map(field => (
                       <td key={field.name} className="px-4 py-3">
                         {formatValue(field, item[field.name])}
                       </td>

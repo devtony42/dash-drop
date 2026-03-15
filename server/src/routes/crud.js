@@ -96,6 +96,58 @@ function buildCrudRouter(prisma, entityName, modelName, entity) {
     }
   });
 
+  // EXPORT — dedicated CSV download with same filters (no pagination)
+  router.get('/export', async (req, res) => {
+    try {
+      const sortBy = req.query.sortBy || 'createdAt';
+      const sortOrder = req.query.sortOrder === 'asc' ? 'asc' : 'desc';
+
+      const filterKeys = ['sortBy', 'sortOrder'];
+      const filterQuery = {};
+      for (const [key, val] of Object.entries(req.query)) {
+        if (!filterKeys.includes(key)) {
+          filterQuery[key] = val;
+        }
+      }
+
+      const where = buildWhereClause(entity, filterQuery);
+      const allData = await model.findMany({
+        where,
+        orderBy: { [sortBy]: sortOrder },
+      });
+
+      // Build CSV with RFC-4180 escaping
+      const fieldNames = entity.fields.map(f => f.name);
+      const columns = ['id', ...fieldNames, 'createdAt', 'updatedAt'];
+
+      const escapeCsv = (val) => {
+        if (val === null || val === undefined) return '';
+        if (typeof val === 'boolean') return val ? 'true' : 'false';
+        if (val instanceof Date) return val.toISOString();
+        if (typeof val === 'number') return String(val);
+        const str = String(val);
+        if (str.includes(',') || str.includes('\n') || str.includes('"')) {
+          return '"' + str.replace(/"/g, '""') + '"';
+        }
+        return str;
+      };
+
+      const header = columns.join(',');
+      const rows = allData.map(record =>
+        columns.map(col => escapeCsv(record[col])).join(',')
+      );
+      const csv = [header, ...rows].join('\n');
+
+      const today = new Date().toISOString().slice(0, 10);
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', `attachment; filename="${entityName}-export-${today}.csv"`);
+      res.send(csv);
+    } catch (err) {
+      console.error(`GET /${modelName}s/export error:`, err);
+      res.status(500).json({ error: 'Failed to export records' });
+    }
+  });
+
   // GET single
   router.get('/:id', async (req, res) => {
     try {
