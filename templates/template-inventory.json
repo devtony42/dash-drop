@@ -1,0 +1,63 @@
+{
+  "entities": [
+    {
+      "name": "Product",
+      "icon": "Package",
+      "fields": [
+        { "name": "sku", "type": "string", "required": true, "searchable": true },
+        { "name": "name", "type": "string", "required": true, "searchable": true },
+        { "name": "category", "type": "enum", "options": ["Electronics", "Clothing", "Food & Beverage", "Raw Materials", "Packaging", "Equipment", "Office Supplies"], "required": true },
+        { "name": "unitPrice", "type": "number", "required": true },
+        { "name": "costPrice", "type": "number", "required": true },
+        { "name": "reorderLevel", "type": "number" },
+        { "name": "weight", "type": "number" },
+        { "name": "status", "type": "enum", "options": ["Active", "Discontinued", "Out of Stock", "Pre-Order"], "required": true, "default": "Active" },
+        { "name": "description", "type": "text" }
+      ]
+    },
+    {
+      "name": "Warehouse",
+      "icon": "Warehouse",
+      "fields": [
+        { "name": "name", "type": "string", "required": true, "searchable": true },
+        { "name": "code", "type": "string", "required": true, "searchable": true },
+        { "name": "address", "type": "string", "required": true },
+        { "name": "city", "type": "string", "searchable": true },
+        { "name": "capacity", "type": "number" },
+        { "name": "currentUtilization", "type": "number" },
+        { "name": "type", "type": "enum", "options": ["Distribution Center", "Cold Storage", "Dry Storage", "Fulfillment Center", "Cross-Dock"], "required": true },
+        { "name": "manager", "type": "string" },
+        { "name": "active", "type": "boolean" }
+      ]
+    },
+    {
+      "name": "StockMovement",
+      "icon": "ArrowRightLeft",
+      "fields": [
+        { "name": "referenceNumber", "type": "string", "required": true, "searchable": true },
+        { "name": "productSku", "type": "string", "required": true, "searchable": true },
+        { "name": "type", "type": "enum", "options": ["Inbound", "Outbound", "Transfer", "Adjustment", "Return"], "required": true },
+        { "name": "quantity", "type": "number", "required": true },
+        { "name": "fromWarehouse", "type": "string" },
+        { "name": "toWarehouse", "type": "string" },
+        { "name": "date", "type": "date", "required": true },
+        { "name": "reason", "type": "text" }
+      ]
+    },
+    {
+      "name": "Supplier",
+      "icon": "Truck",
+      "fields": [
+        { "name": "name", "type": "string", "required": true, "searchable": true },
+        { "name": "contactPerson", "type": "string", "searchable": true },
+        { "name": "email", "type": "string" },
+        { "name": "phone", "type": "string" },
+        { "name": "category", "type": "enum", "options": ["Manufacturer", "Distributor", "Wholesaler", "Importer", "Local Vendor"], "required": true },
+        { "name": "leadTimeDays", "type": "number" },
+        { "name": "rating", "type": "enum", "options": ["Gold", "Silver", "Bronze", "Under Review"], "default": "Silver" },
+        { "name": "paymentTerms", "type": "enum", "options": ["Net 15", "Net 30", "Net 60", "COD", "Prepaid"] },
+        { "name": "notes", "type": "text" }
+      ]
+    }
+  ]
+}
