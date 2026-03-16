@@ -1,0 +1,60 @@
+{
+  "entities": [
+    {
+      "name": "Account",
+      "icon": "Landmark",
+      "fields": [
+        { "name": "name", "type": "string", "required": true, "searchable": true },
+        { "name": "accountNumber", "type": "string", "required": true, "searchable": true },
+        { "name": "type", "type": "enum", "options": ["Asset", "Liability", "Equity", "Revenue", "Expense"], "required": true },
+        { "name": "subtype", "type": "enum", "options": ["Cash", "Accounts Receivable", "Accounts Payable", "Credit Card", "Loan", "Retained Earnings", "Sales", "COGS", "Operating Expense", "Payroll"] },
+        { "name": "balance", "type": "number", "required": true },
+        { "name": "currency", "type": "enum", "options": ["USD", "EUR", "GBP", "CAD", "AUD"], "default": "USD" },
+        { "name": "active", "type": "boolean" },
+        { "name": "description", "type": "text" }
+      ]
+    },
+    {
+      "name": "Transaction",
+      "icon": "ArrowUpDown",
+      "fields": [
+        { "name": "date", "type": "date", "required": true },
+        { "name": "description", "type": "string", "required": true, "searchable": true },
+        { "name": "accountName", "type": "string", "required": true, "searchable": true },
+        { "name": "type", "type": "enum", "options": ["Income", "Expense", "Transfer", "Journal Entry"], "required": true },
+        { "name": "amount", "type": "number", "required": true },
+        { "name": "category", "type": "enum", "options": ["Sales", "Services", "Rent", "Utilities", "Payroll", "Supplies", "Travel", "Marketing", "Insurance", "Tax", "Other"] },
+        { "name": "payee", "type": "string", "searchable": true },
+        { "name": "reference", "type": "string" },
+        { "name": "reconciled", "type": "boolean" }
+      ]
+    },
+    {
+      "name": "Budget",
+      "icon": "PieChart",
+      "fields": [
+        { "name": "name", "type": "string", "required": true, "searchable": true },
+        { "name": "category", "type": "enum", "options": ["Revenue", "COGS", "Operating", "Payroll", "Marketing", "R&D", "Capital Expenditure"], "required": true },
+        { "name": "period", "type": "enum", "options": ["Q1 2026", "Q2 2026", "Q3 2026", "Q4 2026", "FY 2026"], "required": true },
+        { "name": "planned", "type": "number", "required": true },
+        { "name": "actual", "type": "number" },
+        { "name": "variance", "type": "number" },
+        { "name": "status", "type": "enum", "options": ["Draft", "Approved", "Active", "Closed"], "required": true, "default": "Draft" },
+        { "name": "notes", "type": "text" }
+      ]
+    },
+    {
+      "name": "Report",
+      "icon": "BarChart3",
+      "readOnly": true,
+      "fields": [
+        { "name": "title", "type": "string", "required": true, "searchable": true },
+        { "name": "type", "type": "enum", "options": ["Income Statement", "Balance Sheet", "Cash Flow", "Aging Report", "Tax Summary", "Custom"], "required": true },
+        { "name": "period", "type": "string", "required": true },
+        { "name": "generatedDate", "type": "date", "required": true },
+        { "name": "status", "type": "enum", "options": ["Draft", "Final", "Archived"], "required": true },
+        { "name": "summary", "type": "text" }
+      ]
+    }
+  ]
+}

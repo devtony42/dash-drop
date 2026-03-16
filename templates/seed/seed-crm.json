@@ -1,0 +1,37 @@
+{
+  "Contact": [
+    { "name": "Sarah Chen", "email": "sarah.chen@techvault.io", "phone": "415-555-0142", "company": "TechVault Inc", "status": "Customer", "source": "Referral", "notes": "Key decision maker for their platform migration" },
+    { "name": "Marcus Johnson", "email": "m.johnson@brightwavemedia.com", "phone": "212-555-0198", "company": "Brightwave Media", "status": "Prospect", "source": "Trade Show", "notes": "Met at SaaS Connect 2025, interested in annual plan" },
+    { "name": "Elena Rodriguez", "email": "elena@greenleafdesign.co", "phone": "305-555-0167", "company": "Greenleaf Design Co", "status": "Lead", "source": "Website", "notes": "Downloaded whitepaper, opened 3 follow-up emails" },
+    { "name": "David Park", "email": "dpark@summitlogistics.com", "phone": "312-555-0134", "company": "Summit Logistics", "status": "Customer", "source": "Cold Call", "notes": "Renewed contract in January, upsell opportunity for analytics add-on" },
+    { "name": "Amara Osei", "email": "amara.osei@novahealthgroup.org", "phone": "404-555-0156", "company": "Nova Health Group", "status": "Prospect", "source": "Social Media", "notes": "LinkedIn inbound, needs HIPAA compliance confirmation" },
+    { "name": "James Mitchell", "email": "jmitchell@ironridgemfg.com", "phone": "614-555-0189", "company": "Ironridge Manufacturing", "status": "Churned", "source": "Referral", "notes": "Left for competitor in Q3 2025, exit interview completed" },
+    { "name": "Priya Sharma", "email": "priya@cloudninesoftware.dev", "phone": "650-555-0123", "company": "CloudNine Software", "status": "Customer", "source": "Website", "notes": "Enterprise plan, 50+ seats" }
+  ],
+  "Company": [
+    { "name": "TechVault Inc", "industry": "Technology", "website": "https://techvault.io", "employees": 230, "annualRevenue": 28000000, "address": "500 Market St, Suite 400, San Francisco, CA 94105" },
+    { "name": "Brightwave Media", "industry": "Other", "website": "https://brightwavemedia.com", "employees": 45, "annualRevenue": 5200000, "address": "88 Park Ave, 12th Floor, New York, NY 10016" },
+    { "name": "Greenleaf Design Co", "industry": "Other", "website": "https://greenleafdesign.co", "employees": 12, "annualRevenue": 1800000, "address": "221 Brickell Ave, Miami, FL 33131" },
+    { "name": "Summit Logistics", "industry": "Manufacturing", "website": "https://summitlogistics.com", "employees": 890, "annualRevenue": 120000000, "address": "1400 S Lake Shore Dr, Chicago, IL 60605" },
+    { "name": "Nova Health Group", "industry": "Healthcare", "website": "https://novahealthgroup.org", "employees": 1200, "annualRevenue": 95000000, "address": "250 Piedmont Ave NE, Atlanta, GA 30308" },
+    { "name": "Ironridge Manufacturing", "industry": "Manufacturing", "website": "https://ironridgemfg.com", "employees": 340, "annualRevenue": 42000000, "address": "700 Goodale Blvd, Columbus, OH 43215" },
+    { "name": "CloudNine Software", "industry": "Technology", "website": "https://cloudninesoftware.dev", "employees": 85, "annualRevenue": 12000000, "address": "2100 Geng Rd, Palo Alto, CA 94303" }
+  ],
+  "Deal": [
+    { "title": "TechVault Platform Migration", "contactName": "Sarah Chen", "companyName": "TechVault Inc", "stage": "Negotiation", "value": 125000, "closeDate": "2026-04-15", "probability": 75, "notes": "Legal review in progress, expecting signed contract by mid-April" },
+    { "title": "Brightwave Annual Subscription", "contactName": "Marcus Johnson", "companyName": "Brightwave Media", "stage": "Proposal", "value": 36000, "closeDate": "2026-03-30", "probability": 50, "notes": "Sent proposal on 3/10, follow-up scheduled for 3/20" },
+    { "title": "Greenleaf Starter Plan", "contactName": "Elena Rodriguez", "companyName": "Greenleaf Design Co", "stage": "Discovery", "value": 9600, "closeDate": "2026-05-01", "probability": 25, "notes": "Initial demo completed, they are comparing 3 vendors" },
+    { "title": "Summit Analytics Add-On", "contactName": "David Park", "companyName": "Summit Logistics", "stage": "Won", "value": 48000, "closeDate": "2026-02-28", "probability": 100, "notes": "Closed-won, implementation kickoff scheduled for March" },
+    { "title": "Nova Health Enterprise Deal", "contactName": "Amara Osei", "companyName": "Nova Health Group", "stage": "Discovery", "value": 200000, "closeDate": "2026-06-30", "probability": 20, "notes": "Large opportunity, requires HIPAA compliance audit first" },
+    { "title": "CloudNine Seat Expansion", "contactName": "Priya Sharma", "companyName": "CloudNine Software", "stage": "Won", "value": 24000, "closeDate": "2026-01-15", "probability": 100, "notes": "Expanded from 50 to 75 seats" }
+  ],
+  "Activity": [
+    { "type": "Meeting", "subject": "TechVault contract review call", "contactName": "Sarah Chen", "date": "2026-03-14", "completed": true, "notes": "Reviewed MSA redlines, 2 items remaining" },
+    { "type": "Email", "subject": "Brightwave proposal follow-up", "contactName": "Marcus Johnson", "date": "2026-03-12", "completed": true, "notes": "Sent pricing comparison and ROI analysis" },
+    { "type": "Call", "subject": "Greenleaf discovery call", "contactName": "Elena Rodriguez", "date": "2026-03-10", "completed": true, "notes": "30 min call, identified key pain points around manual reporting" },
+    { "type": "Task", "subject": "Prepare Nova Health HIPAA documentation", "contactName": "Amara Osei", "date": "2026-03-20", "completed": false, "notes": "Need to compile compliance cert and data processing agreement" },
+    { "type": "Meeting", "subject": "Summit implementation kickoff", "contactName": "David Park", "date": "2026-03-18", "completed": false, "notes": "Kickoff meeting with their IT team, bring onboarding checklist" },
+    { "type": "Note", "subject": "Ironridge churn post-mortem", "contactName": "James Mitchell", "date": "2026-03-05", "completed": true, "notes": "Main reasons: missing custom reports feature, slow support response times" },
+    { "type": "Call", "subject": "CloudNine quarterly check-in", "contactName": "Priya Sharma", "date": "2026-03-16", "completed": false, "notes": "Quarterly business review, discuss roadmap and renewal timeline" }
+  ]
+}
