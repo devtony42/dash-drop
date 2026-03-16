@@ -1,0 +1,45 @@
+{
+  "Project": [
+    { "name": "Riverside Commons Apartments", "client": "Meridian Development Group", "status": "In Progress", "type": "Residential", "budget": 4200000, "spent": 1850000, "startDate": "2025-09-15", "endDate": "2026-08-30", "address": "450 River Rd, Portland, OR 97201", "notes": "72-unit apartment complex, currently on schedule" },
+    { "name": "Oakmont Office Park Phase II", "client": "Oakmont Properties LLC", "status": "Planning", "type": "Commercial", "budget": 8500000, "spent": 120000, "startDate": "2026-05-01", "endDate": "2027-06-30", "address": "1200 Oakmont Blvd, Denver, CO 80202", "notes": "3-story office building, permits submitted" },
+    { "name": "Harbor View Kitchen Remodel", "client": "Patricia & Tom Walsh", "status": "Completed", "type": "Renovation", "budget": 85000, "spent": 79200, "startDate": "2025-11-01", "endDate": "2026-01-20", "address": "88 Harbor View Dr, Seattle, WA 98101", "notes": "Completed under budget, client very satisfied" },
+    { "name": "Pine Street Bridge Repair", "client": "City of Bend Public Works", "status": "Permitting", "type": "Infrastructure", "budget": 1200000, "spent": 35000, "startDate": "2026-04-01", "endDate": "2026-10-15", "address": "Pine St & 3rd Ave, Bend, OR 97701", "notes": "Awaiting environmental impact review approval" },
+    { "name": "Westfield Distribution Center", "client": "Westfield Logistics Inc", "status": "In Progress", "type": "Industrial", "budget": 6800000, "spent": 4100000, "startDate": "2025-06-01", "endDate": "2026-04-30", "address": "9500 Industrial Pkwy, Sacramento, CA 95834", "notes": "Steel structure complete, MEP rough-in underway" },
+    { "name": "Maple Ridge Custom Home", "client": "Daniel & Maria Cortez", "status": "In Progress", "type": "Residential", "budget": 520000, "spent": 310000, "startDate": "2025-10-01", "endDate": "2026-05-15", "address": "1422 Maple Ridge Ln, Boise, ID 83702", "notes": "Framing complete, passed structural inspection" }
+  ],
+  "Contractor": [
+    { "name": "Mike Brennan", "company": "Brennan Electric", "trade": "Electrical", "phone": "503-555-0145", "email": "mike@brennanelectric.com", "hourlyRate": 95, "licensed": true, "rating": "Preferred", "notes": "15+ years experience, handles all our commercial projects" },
+    { "name": "Lisa Nakamura", "company": "NW Plumbing Solutions", "trade": "Plumbing", "phone": "503-555-0178", "email": "lisa@nwplumbing.com", "hourlyRate": 88, "licensed": true, "rating": "Preferred", "notes": "Fast turnaround, great on remodels" },
+    { "name": "Carlos Mendez", "company": "Mendez Concrete Works", "trade": "Concrete", "phone": "503-555-0199", "email": "carlos@mendezconcrete.com", "hourlyRate": 75, "licensed": true, "rating": "Approved", "notes": "Reliable for foundations and flatwork" },
+    { "name": "Jake Turner", "company": "Turner Framing Crew", "trade": "Framing", "phone": "503-555-0112", "email": "jake@turnerframing.com", "hourlyRate": 70, "licensed": true, "rating": "Approved", "notes": "4-man crew, available for residential and light commercial" },
+    { "name": "Sandra Williams", "company": "Climate Control Pros", "trade": "HVAC", "phone": "503-555-0167", "email": "sandra@climatepros.com", "hourlyRate": 92, "licensed": true, "rating": "Preferred", "notes": "Certified in high-efficiency commercial systems" },
+    { "name": "Ray Kowalski", "company": "Independent", "trade": "Painting", "phone": "503-555-0134", "email": "ray.kowalski@gmail.com", "hourlyRate": 55, "licensed": false, "rating": "Probation", "notes": "Good quality but missed last two deadlines" },
+    { "name": "Diane Patel", "company": "EverGreen Landscaping", "trade": "Landscaping", "phone": "503-555-0189", "email": "diane@evergreenlandscape.com", "hourlyRate": 65, "licensed": true, "rating": "Approved", "notes": "Handles irrigation, hardscape, and planting" }
+  ],
+  "Material": [
+    { "name": "2x6 SPF Lumber (8ft)", "category": "Lumber", "supplier": "Pacific Lumber Supply", "unitCost": 8.50, "unit": "Each", "quantityOnHand": 450, "reorderPoint": 100, "projectName": "Maple Ridge Custom Home" },
+    { "name": "Ready-Mix Concrete (4000 PSI)", "category": "Concrete", "supplier": "Cascade Concrete Co", "unitCost": 145.00, "unit": "Cu Yd", "quantityOnHand": 0, "reorderPoint": 0, "projectName": "Riverside Commons Apartments" },
+    { "name": "12/2 Romex NM-B Wire", "category": "Electrical", "supplier": "Graybar Electric", "unitCost": 0.85, "unit": "Linear Ft", "quantityOnHand": 2500, "reorderPoint": 500, "projectName": "Westfield Distribution Center" },
+    { "name": "3/4\" Copper Pipe Type L", "category": "Plumbing", "supplier": "Ferguson Plumbing Supply", "unitCost": 4.20, "unit": "Linear Ft", "quantityOnHand": 800, "reorderPoint": 200, "projectName": "Riverside Commons Apartments" },
+    { "name": "Structural Steel I-Beam W10x22", "category": "Steel", "supplier": "Northwest Steel Corp", "unitCost": 32.00, "unit": "Linear Ft", "quantityOnHand": 120, "reorderPoint": 40, "projectName": "Westfield Distribution Center" },
+    { "name": "Interior Latex Paint (5 gal)", "category": "Finishing", "supplier": "Sherwin-Williams", "unitCost": 185.00, "unit": "Each", "quantityOnHand": 24, "reorderPoint": 8, "projectName": "Harbor View Kitchen Remodel" },
+    { "name": "Safety Hard Hats (OSHA Class E)", "category": "Safety", "supplier": "Grainger Industrial", "unitCost": 28.00, "unit": "Each", "quantityOnHand": 35, "reorderPoint": 10, "projectName": "" }
+  ],
+  "Milestone": [
+    { "title": "Foundation pour complete", "projectName": "Riverside Commons Apartments", "phase": "Foundation", "dueDate": "2025-11-30", "status": "Completed", "completedDate": "2025-11-28", "notes": "Passed inspection on first attempt" },
+    { "title": "Framing inspection", "projectName": "Riverside Commons Apartments", "phase": "Framing", "dueDate": "2026-03-15", "status": "In Progress", "completedDate": null, "notes": "Building A complete, Building B 60% done" },
+    { "title": "Permit approval", "projectName": "Pine Street Bridge Repair", "phase": "Pre-Construction", "dueDate": "2026-03-30", "status": "Delayed", "completedDate": null, "notes": "Environmental review taking longer than expected" },
+    { "title": "Steel structure erection", "projectName": "Westfield Distribution Center", "phase": "Framing", "dueDate": "2026-01-15", "status": "Completed", "completedDate": "2026-01-12", "notes": "All 48 bays erected and bolted" },
+    { "title": "MEP rough-in complete", "projectName": "Westfield Distribution Center", "phase": "MEP Rough-In", "dueDate": "2026-03-31", "status": "In Progress", "completedDate": null, "notes": "Electrical 80%, plumbing 90%, HVAC 60%" },
+    { "title": "Final walkthrough", "projectName": "Harbor View Kitchen Remodel", "phase": "Final Inspection", "dueDate": "2026-01-18", "status": "Completed", "completedDate": "2026-01-18", "notes": "Client signed off, punch list complete" },
+    { "title": "Roof dry-in", "projectName": "Maple Ridge Custom Home", "phase": "Exterior", "dueDate": "2026-03-01", "status": "Completed", "completedDate": "2026-02-27", "notes": "30-year architectural shingles installed" }
+  ],
+  "Invoice": [
+    { "invoiceNumber": "INV-2026-0042", "projectName": "Riverside Commons Apartments", "contractorName": "Brennan Electric", "amount": 34500, "status": "Approved", "issueDate": "2026-03-01", "dueDate": "2026-03-31", "description": "Electrical rough-in for Buildings A and B, first floor" },
+    { "invoiceNumber": "INV-2026-0043", "projectName": "Riverside Commons Apartments", "contractorName": "NW Plumbing Solutions", "amount": 28900, "status": "Paid", "issueDate": "2026-02-15", "dueDate": "2026-03-15", "description": "Plumbing rough-in for Building A, all floors" },
+    { "invoiceNumber": "INV-2026-0044", "projectName": "Westfield Distribution Center", "contractorName": "Climate Control Pros", "amount": 67200, "status": "Submitted", "issueDate": "2026-03-10", "dueDate": "2026-04-10", "description": "HVAC ductwork installation, warehouse zones 1-3" },
+    { "invoiceNumber": "INV-2026-0045", "projectName": "Maple Ridge Custom Home", "contractorName": "Turner Framing Crew", "amount": 18500, "status": "Paid", "issueDate": "2026-01-20", "dueDate": "2026-02-20", "description": "Complete framing package including roof trusses" },
+    { "invoiceNumber": "INV-2026-0046", "projectName": "Harbor View Kitchen Remodel", "contractorName": "NW Plumbing Solutions", "amount": 4200, "status": "Paid", "issueDate": "2025-12-15", "dueDate": "2026-01-15", "description": "Kitchen sink relocation and dishwasher hookup" },
+    { "invoiceNumber": "INV-2026-0047", "projectName": "Westfield Distribution Center", "contractorName": "Mendez Concrete Works", "amount": 52000, "status": "Paid", "issueDate": "2025-10-30", "dueDate": "2025-11-30", "description": "Warehouse slab pour, 45,000 sq ft" }
+  ]
+}

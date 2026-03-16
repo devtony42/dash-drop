@@ -1,0 +1,36 @@
+{
+  "Account": [
+    { "name": "Operating Checking", "accountNumber": "1010", "type": "Asset", "subtype": "Cash", "balance": 284500, "currency": "USD", "active": true, "description": "Primary operating account at First National Bank" },
+    { "name": "Savings Reserve", "accountNumber": "1020", "type": "Asset", "subtype": "Cash", "balance": 150000, "currency": "USD", "active": true, "description": "6-month operating reserve" },
+    { "name": "Accounts Receivable", "accountNumber": "1200", "type": "Asset", "subtype": "Accounts Receivable", "balance": 67800, "currency": "USD", "active": true, "description": "Outstanding customer invoices" },
+    { "name": "Accounts Payable", "accountNumber": "2010", "type": "Liability", "subtype": "Accounts Payable", "balance": 32100, "currency": "USD", "active": true, "description": "Unpaid vendor bills" },
+    { "name": "Business Line of Credit", "accountNumber": "2100", "type": "Liability", "subtype": "Loan", "balance": 45000, "currency": "USD", "active": true, "description": "$100k revolving credit line at 7.5% APR" },
+    { "name": "Product Revenue", "accountNumber": "4010", "type": "Revenue", "subtype": "Sales", "balance": 523000, "currency": "USD", "active": true, "description": "YTD product sales revenue" },
+    { "name": "Service Revenue", "accountNumber": "4020", "type": "Revenue", "subtype": "Sales", "balance": 189000, "currency": "USD", "active": true, "description": "YTD consulting and service revenue" },
+    { "name": "Rent Expense", "accountNumber": "5020", "type": "Expense", "subtype": "Operating Expense", "balance": 36000, "currency": "USD", "active": true, "description": "Office lease at 400 Main St" }
+  ],
+  "Transaction": [
+    { "date": "2026-03-15", "description": "Monthly office rent", "accountName": "Rent Expense", "type": "Expense", "amount": 6000, "category": "Rent", "payee": "400 Main Street LLC", "reference": "CHK-1045", "reconciled": true },
+    { "date": "2026-03-14", "description": "Client payment - TechVault Q1 retainer", "accountName": "Product Revenue", "type": "Income", "amount": 31250, "category": "Services", "payee": "TechVault Inc", "reference": "ACH-8821", "reconciled": true },
+    { "date": "2026-03-12", "description": "AWS hosting - March", "accountName": "Operating Checking", "type": "Expense", "amount": 2340, "category": "Utilities", "payee": "Amazon Web Services", "reference": "CC-3344", "reconciled": false },
+    { "date": "2026-03-10", "description": "Bi-weekly payroll", "accountName": "Operating Checking", "type": "Expense", "amount": 48500, "category": "Payroll", "payee": "Gusto Payroll", "reference": "ACH-8819", "reconciled": true },
+    { "date": "2026-03-08", "description": "Google Ads - February campaign", "accountName": "Operating Checking", "type": "Expense", "amount": 3200, "category": "Marketing", "payee": "Google LLC", "reference": "CC-3340", "reconciled": false },
+    { "date": "2026-03-05", "description": "Client payment - CloudNine seat expansion", "accountName": "Product Revenue", "type": "Income", "amount": 24000, "category": "Sales", "payee": "CloudNine Software", "reference": "ACH-8815", "reconciled": true },
+    { "date": "2026-03-01", "description": "Transfer to savings reserve", "accountName": "Savings Reserve", "type": "Transfer", "amount": 25000, "category": "Other", "payee": "", "reference": "INT-0301", "reconciled": true }
+  ],
+  "Budget": [
+    { "name": "Q1 Revenue Target", "category": "Revenue", "period": "Q1 2026", "planned": 250000, "actual": 223000, "variance": -27000, "status": "Active", "notes": "Tracking 11% below target, need to close 2 more deals" },
+    { "name": "Q1 Payroll", "category": "Payroll", "period": "Q1 2026", "planned": 300000, "actual": 291000, "variance": -9000, "status": "Active", "notes": "Under budget due to delayed Q1 hire" },
+    { "name": "Q1 Marketing Spend", "category": "Marketing", "period": "Q1 2026", "planned": 45000, "actual": 38400, "variance": -6600, "status": "Active", "notes": "Shifted some spend to Q2 for product launch campaign" },
+    { "name": "Q2 Revenue Target", "category": "Revenue", "period": "Q2 2026", "planned": 320000, "actual": 0, "variance": 0, "status": "Approved", "notes": "Includes expected TechVault and Nova Health closes" },
+    { "name": "FY 2026 Operating Budget", "category": "Operating", "period": "FY 2026", "planned": 480000, "actual": 118000, "variance": -362000, "status": "Active", "notes": "Rent, utilities, software, insurance, office supplies" },
+    { "name": "FY 2026 R&D Investment", "category": "R&D", "period": "FY 2026", "planned": 200000, "actual": 42000, "variance": -158000, "status": "Active", "notes": "New product development and infrastructure upgrades" }
+  ],
+  "Report": [
+    { "title": "Q4 2025 Income Statement", "type": "Income Statement", "period": "Q4 2025", "generatedDate": "2026-01-15", "status": "Final", "summary": "Revenue: $198k, Expenses: $165k, Net Income: $33k. Revenue up 12% QoQ driven by 3 new enterprise clients." },
+    { "title": "FY 2025 Balance Sheet", "type": "Balance Sheet", "period": "FY 2025", "generatedDate": "2026-02-01", "status": "Final", "summary": "Total Assets: $580k, Total Liabilities: $77k, Equity: $503k. Healthy cash position with 6-month runway." },
+    { "title": "February 2026 Cash Flow", "type": "Cash Flow", "period": "Feb 2026", "generatedDate": "2026-03-05", "status": "Final", "summary": "Operating cash flow: +$45k. Strong collections offset by payroll and vendor payments." },
+    { "title": "AR Aging Report - March 2026", "type": "Aging Report", "period": "Mar 2026", "generatedDate": "2026-03-15", "status": "Draft", "summary": "Current: $42k, 30-day: $18k, 60-day: $5.8k, 90+: $2k. Two accounts flagged for follow-up." },
+    { "title": "Q1 2026 Tax Estimate", "type": "Tax Summary", "period": "Q1 2026", "generatedDate": "2026-03-10", "status": "Draft", "summary": "Estimated quarterly tax payment: $14,200. Based on projected Q1 net income of $58k." }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "Employee": [
+    { "name": "Jessica Torres", "email": "jtorres@company.com", "phone": "212-555-0145", "department": "Engineering", "title": "VP of Engineering", "status": "Active", "type": "Full-Time", "startDate": "2021-03-15", "salary": 195000, "manager": "" },
+    { "name": "Ryan Cooper", "email": "rcooper@company.com", "phone": "212-555-0178", "department": "Engineering", "title": "Senior Software Engineer", "status": "Active", "type": "Full-Time", "startDate": "2022-06-01", "salary": 155000, "manager": "Jessica Torres" },
+    { "name": "Aisha Patel", "email": "apatel@company.com", "phone": "415-555-0199", "department": "Product", "title": "Product Manager", "status": "Active", "type": "Full-Time", "startDate": "2023-01-09", "salary": 140000, "manager": "Jessica Torres" },
+    { "name": "Marcus Chen", "email": "mchen@company.com", "phone": "212-555-0112", "department": "Sales", "title": "Sales Director", "status": "Active", "type": "Full-Time", "startDate": "2022-09-01", "salary": 130000, "manager": "" },
+    { "name": "Lauren Kim", "email": "lkim@company.com", "phone": "512-555-0134", "department": "Marketing", "title": "Marketing Manager", "status": "On Leave", "type": "Full-Time", "startDate": "2023-04-15", "salary": 110000, "manager": "Marcus Chen" },
+    { "name": "Daniel Wright", "email": "dwright@company.com", "phone": "212-555-0167", "department": "Engineering", "title": "Software Engineer", "status": "Probation", "type": "Full-Time", "startDate": "2026-01-06", "salary": 120000, "manager": "Jessica Torres" },
+    { "name": "Sofia Ramirez", "email": "sramirez@company.com", "phone": "305-555-0189", "department": "HR", "title": "HR Manager", "status": "Active", "type": "Full-Time", "startDate": "2022-02-01", "salary": 105000, "manager": "" },
+    { "name": "Alex Novak", "email": "anovak@company.com", "phone": "650-555-0123", "department": "Engineering", "title": "Frontend Developer (Contract)", "status": "Active", "type": "Contract", "startDate": "2025-11-01", "salary": 85, "manager": "Jessica Torres" }
+  ],
+  "Department": [
+    { "name": "Engineering", "code": "ENG", "head": "Jessica Torres", "headcount": 12, "budget": 2400000, "location": "HQ - New York", "status": "Active" },
+    { "name": "Sales", "code": "SLS", "head": "Marcus Chen", "headcount": 6, "budget": 950000, "location": "HQ - New York", "status": "Active" },
+    { "name": "Marketing", "code": "MKT", "head": "Lauren Kim", "headcount": 4, "budget": 620000, "location": "Remote", "status": "Active" },
+    { "name": "Human Resources", "code": "HR", "head": "Sofia Ramirez", "headcount": 3, "budget": 380000, "location": "HQ - New York", "status": "Active" },
+    { "name": "Product", "code": "PRD", "head": "Aisha Patel", "headcount": 5, "budget": 780000, "location": "West - San Francisco", "status": "Active" },
+    { "name": "Finance", "code": "FIN", "head": "", "headcount": 2, "budget": 280000, "location": "HQ - New York", "status": "Restructuring" }
+  ],
+  "LeaveRequest": [
+    { "employeeName": "Lauren Kim", "type": "Parental", "startDate": "2026-02-15", "endDate": "2026-05-15", "days": 65, "status": "Approved", "approver": "Marcus Chen", "reason": "Parental leave — expected return May 18" },
+    { "employeeName": "Ryan Cooper", "type": "Vacation", "startDate": "2026-04-07", "endDate": "2026-04-11", "days": 5, "status": "Approved", "approver": "Jessica Torres", "reason": "Family trip to Hawaii, work covered by Daniel" },
+    { "employeeName": "Aisha Patel", "type": "Sick", "startDate": "2026-03-10", "endDate": "2026-03-11", "days": 2, "status": "Approved", "approver": "Jessica Torres", "reason": "Flu" },
+    { "employeeName": "Daniel Wright", "type": "Personal", "startDate": "2026-03-28", "endDate": "2026-03-28", "days": 1, "status": "Pending", "approver": "Jessica Torres", "reason": "Apartment move" },
+    { "employeeName": "Marcus Chen", "type": "Vacation", "startDate": "2026-05-25", "endDate": "2026-05-30", "days": 5, "status": "Pending", "approver": "", "reason": "Memorial Day week off, Q2 targets will be met before departure" },
+    { "employeeName": "Sofia Ramirez", "type": "Jury Duty", "startDate": "2026-04-14", "endDate": "2026-04-16", "days": 3, "status": "Approved", "approver": "", "reason": "County jury summons received" }
+  ],
+  "Review": [
+    { "employeeName": "Ryan Cooper", "reviewer": "Jessica Torres", "period": "Annual 2025", "type": "Annual", "rating": "Exceeds Expectations", "completedDate": "2026-01-20", "status": "Acknowledged", "summary": "Ryan consistently delivered high-quality features and mentored two junior devs. Recommended for promotion to Staff Engineer." },
+    { "employeeName": "Aisha Patel", "reviewer": "Jessica Torres", "period": "Annual 2025", "type": "Annual", "rating": "Meets Expectations", "completedDate": "2026-01-22", "status": "Acknowledged", "summary": "Aisha successfully launched 3 product features and improved sprint velocity by 15%. Opportunity to deepen technical skills." },
+    { "employeeName": "Marcus Chen", "reviewer": "Jessica Torres", "period": "Annual 2025", "type": "Annual", "rating": "Exceeds Expectations", "completedDate": "2026-01-25", "status": "Acknowledged", "summary": "Marcus exceeded sales target by 18% and built a strong team culture. Top performer in the organization." },
+    { "employeeName": "Daniel Wright", "reviewer": "Jessica Torres", "period": "Q1 2026", "type": "Probation", "rating": "Meets Expectations", "completedDate": null, "status": "Scheduled", "summary": "90-day probation review scheduled for April. Initial feedback is positive — ramping up well on the codebase." },
+    { "employeeName": "Lauren Kim", "reviewer": "Marcus Chen", "period": "Annual 2025", "type": "Annual", "rating": "Meets Expectations", "completedDate": "2026-01-18", "status": "Acknowledged", "summary": "Lauren drove a 25% increase in marketing-qualified leads. Going on parental leave, review completed early." },
+    { "employeeName": "Sofia Ramirez", "reviewer": "Jessica Torres", "period": "Q1 2026", "type": "Quarterly", "rating": "Exceeds Expectations", "completedDate": "2026-03-14", "status": "Completed", "summary": "Sofia onboarded 3 new hires, launched the new PTO system, and led the benefits renewal. Outstanding quarter." }
+  ]
+}
