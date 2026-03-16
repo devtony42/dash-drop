@@ -1,26 +1,38 @@
 {
   "entities": [
     {
-      "name": "Product",
-      "icon": "Package",
+      "name": "Contact",
+      "icon": "Users",
       "fields": [
         { "name": "name", "type": "string", "required": true, "searchable": true },
-        { "name": "sku", "type": "string", "required": true, "searchable": true },
-        { "name": "price", "type": "number", "required": true },
-        { "name": "category", "type": "enum", "options": ["Electronics", "Clothing", "Food", "Home", "Sports"], "required": true },
-        { "name": "inStock", "type": "boolean", "default": true },
-        { "name": "description", "type": "text" }
+        { "name": "email", "type": "string", "required": true, "searchable": true },
+        { "name": "phone", "type": "string" },
+        { "name": "company", "type": "string", "searchable": true },
+        { "name": "status", "type": "enum", "options": ["Lead", "Prospect", "Customer", "Churned"], "required": true, "default": "Lead" },
+        { "name": "notes", "type": "text" }
       ]
     },
     {
-      "name": "Order",
-      "icon": "ShoppingCart",
+      "name": "Deal",
+      "icon": "TrendingUp",
       "fields": [
-        { "name": "orderNumber", "type": "string", "required": true, "searchable": true },
-        { "name": "customerName", "type": "string", "required": true, "searchable": true },
-        { "name": "customerEmail", "type": "string", "required": true, "searchable": true },
-        { "name": "status", "type": "enum", "options": ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"], "required": true },
-        { "name": "totalAmount", "type": "number", "required": true },
+        { "name": "title", "type": "string", "required": true, "searchable": true },
+        { "name": "contactName", "type": "string", "required": true, "searchable": true },
+        { "name": "stage", "type": "enum", "options": ["Discovery", "Proposal", "Negotiation", "Won", "Lost"], "required": true, "default": "Discovery" },
+        { "name": "value", "type": "number", "required": true },
+        { "name": "closeDate", "type": "date" },
+        { "name": "notes", "type": "text" }
+      ]
+    },
+    {
+      "name": "Activity",
+      "icon": "Activity",
+      "readOnly": false,
+      "fields": [
+        { "name": "type", "type": "enum", "options": ["Call", "Email", "Meeting", "Note"], "required": true },
+        { "name": "subject", "type": "string", "required": true, "searchable": true },
+        { "name": "contactName", "type": "string", "required": true, "searchable": true },
+        { "name": "date", "type": "date", "required": true },
         { "name": "notes", "type": "text" }
       ]
     }
