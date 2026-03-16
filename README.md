@@ -36,6 +36,27 @@ docker compose up
 
 ---
 
+## Templates
+
+Pre-built schemas for common industries — drop one in and go:
+
+| Template | Entities | File |
+|----------|----------|------|
+| **CRM** | Contacts, Companies, Deals, Activities | `templates/template-crm.json` |
+| **Construction** | Projects, Contractors, Materials, Milestones, Invoices | `templates/template-construction.json` |
+| **Inventory** | Products, Warehouses, Stock Movements, Suppliers | `templates/template-inventory.json` |
+| **Finance** | Accounts, Transactions, Budgets, Reports | `templates/template-finance.json` |
+| **HR** | Employees, Departments, Leave Requests, Reviews | `templates/template-hr.json` |
+
+```bash
+cp templates/template-construction.json schema.config.json
+docker compose down && docker compose up
+```
+
+Each template includes seed data for demos. See [templates/README.md](templates/README.md) for details.
+
+---
+
 ## Schema Config
 
 Edit `schema.config.json` to define your entities:
@@ -113,4 +134,4 @@ One-click deploy via `render.yaml` included in this repo. Spins up:
 
 See [docs/BACKLOG.md](docs/BACKLOG.md) for the full roadmap.
 
-Coming soon: entity relationships, bulk actions, audit log, industry templates, Schema UI builder.
+Coming soon: entity relationships, bulk actions, audit log, Schema UI builder.

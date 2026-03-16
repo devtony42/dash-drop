@@ -1,0 +1,76 @@
+{
+  "entities": [
+    {
+      "name": "Project",
+      "icon": "HardHat",
+      "fields": [
+        { "name": "name", "type": "string", "required": true, "searchable": true },
+        { "name": "client", "type": "string", "required": true, "searchable": true },
+        { "name": "status", "type": "enum", "options": ["Planning", "Permitting", "In Progress", "Inspection", "Completed", "On Hold"], "required": true, "default": "Planning" },
+        { "name": "type", "type": "enum", "options": ["Residential", "Commercial", "Industrial", "Renovation", "Infrastructure"] },
+        { "name": "budget", "type": "number", "required": true },
+        { "name": "spent", "type": "number" },
+        { "name": "startDate", "type": "date", "required": true },
+        { "name": "endDate", "type": "date" },
+        { "name": "address", "type": "string", "searchable": true },
+        { "name": "notes", "type": "text" }
+      ]
+    },
+    {
+      "name": "Contractor",
+      "icon": "Users",
+      "fields": [
+        { "name": "name", "type": "string", "required": true, "searchable": true },
+        { "name": "company", "type": "string", "searchable": true },
+        { "name": "trade", "type": "enum", "options": ["General", "Electrical", "Plumbing", "HVAC", "Framing", "Concrete", "Roofing", "Painting", "Landscaping"], "required": true },
+        { "name": "phone", "type": "string", "required": true },
+        { "name": "email", "type": "string" },
+        { "name": "hourlyRate", "type": "number" },
+        { "name": "licensed", "type": "boolean" },
+        { "name": "rating", "type": "enum", "options": ["Preferred", "Approved", "Probation", "Blacklisted"], "default": "Approved" },
+        { "name": "notes", "type": "text" }
+      ]
+    },
+    {
+      "name": "Material",
+      "icon": "Package",
+      "fields": [
+        { "name": "name", "type": "string", "required": true, "searchable": true },
+        { "name": "category", "type": "enum", "options": ["Lumber", "Concrete", "Steel", "Electrical", "Plumbing", "Finishing", "Hardware", "Safety"], "required": true },
+        { "name": "supplier", "type": "string", "searchable": true },
+        { "name": "unitCost", "type": "number", "required": true },
+        { "name": "unit", "type": "enum", "options": ["Each", "Linear Ft", "Sq Ft", "Cu Yd", "Ton", "Gallon", "Box"], "required": true },
+        { "name": "quantityOnHand", "type": "number" },
+        { "name": "reorderPoint", "type": "number" },
+        { "name": "projectName", "type": "string", "searchable": true }
+      ]
+    },
+    {
+      "name": "Milestone",
+      "icon": "Flag",
+      "fields": [
+        { "name": "title", "type": "string", "required": true, "searchable": true },
+        { "name": "projectName", "type": "string", "required": true, "searchable": true },
+        { "name": "phase", "type": "enum", "options": ["Pre-Construction", "Foundation", "Framing", "MEP Rough-In", "Exterior", "Interior Finish", "Final Inspection", "Closeout"], "required": true },
+        { "name": "dueDate", "type": "date", "required": true },
+        { "name": "status", "type": "enum", "options": ["Upcoming", "In Progress", "Completed", "Delayed"], "required": true, "default": "Upcoming" },
+        { "name": "completedDate", "type": "date" },
+        { "name": "notes", "type": "text" }
+      ]
+    },
+    {
+      "name": "Invoice",
+      "icon": "FileText",
+      "fields": [
+        { "name": "invoiceNumber", "type": "string", "required": true, "searchable": true },
+        { "name": "projectName", "type": "string", "required": true, "searchable": true },
+        { "name": "contractorName", "type": "string", "searchable": true },
+        { "name": "amount", "type": "number", "required": true },
+        { "name": "status", "type": "enum", "options": ["Draft", "Submitted", "Approved", "Paid", "Disputed"], "required": true, "default": "Draft" },
+        { "name": "issueDate", "type": "date", "required": true },
+        { "name": "dueDate", "type": "date" },
+        { "name": "description", "type": "text" }
+      ]
+    }
+  ]
+}

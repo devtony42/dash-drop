@@ -1,0 +1,36 @@
+{
+  "Product": [
+    { "sku": "ELC-HDPH-001", "name": "ProSound Wireless Headphones", "category": "Electronics", "unitPrice": 79.99, "costPrice": 32.00, "reorderLevel": 50, "weight": 0.35, "status": "Active", "description": "Bluetooth 5.3, 40hr battery, noise canceling" },
+    { "sku": "ELC-CHRG-002", "name": "USB-C Fast Charger 65W", "category": "Electronics", "unitPrice": 34.99, "costPrice": 12.50, "reorderLevel": 100, "weight": 0.18, "status": "Active", "description": "GaN charger, compatible with laptops and phones" },
+    { "sku": "CLT-TSHRT-010", "name": "Essential Cotton Crew Tee", "category": "Clothing", "unitPrice": 24.99, "costPrice": 6.80, "reorderLevel": 200, "weight": 0.22, "status": "Active", "description": "100% ring-spun cotton, available in 8 colors" },
+    { "sku": "FNB-CFEE-005", "name": "Single Origin Dark Roast Coffee", "category": "Food & Beverage", "unitPrice": 16.99, "costPrice": 7.20, "reorderLevel": 75, "weight": 0.34, "status": "Active", "description": "12oz bag, Colombian dark roast, whole bean" },
+    { "sku": "RAW-POLY-020", "name": "HDPE Pellets (Industrial Grade)", "category": "Raw Materials", "unitPrice": 1.85, "costPrice": 0.95, "reorderLevel": 5000, "weight": 0.001, "status": "Active", "description": "Per kg, minimum order 500kg, injection molding grade" },
+    { "sku": "PKG-BOX-015", "name": "Corrugated Shipping Box 12x10x6", "category": "Packaging", "unitPrice": 1.20, "costPrice": 0.45, "reorderLevel": 1000, "weight": 0.28, "status": "Active", "description": "32 ECT single-wall, kraft brown" },
+    { "sku": "ELC-SPKR-003", "name": "MiniBlast Portable Speaker", "category": "Electronics", "unitPrice": 49.99, "costPrice": 18.00, "reorderLevel": 40, "weight": 0.52, "status": "Out of Stock", "description": "IPX7 waterproof, 12hr battery, discontinued color" },
+    { "sku": "EQP-SCAN-001", "name": "Handheld Barcode Scanner", "category": "Equipment", "unitPrice": 189.00, "costPrice": 85.00, "reorderLevel": 10, "weight": 0.28, "status": "Active", "description": "2D/1D scanner, USB and Bluetooth, warehouse-grade" }
+  ],
+  "Warehouse": [
+    { "name": "East Coast Distribution Center", "code": "WH-EAST", "address": "1500 Commerce Way", "city": "Edison, NJ", "capacity": 50000, "currentUtilization": 72, "type": "Distribution Center", "manager": "Robert Kim", "active": true },
+    { "name": "West Coast Fulfillment Hub", "code": "WH-WEST", "address": "8800 Pacific Blvd", "city": "Ontario, CA", "capacity": 75000, "currentUtilization": 85, "type": "Fulfillment Center", "manager": "Angela Torres", "active": true },
+    { "name": "Midwest Cold Storage", "code": "WH-COLD", "address": "3200 Industrial Dr", "city": "Indianapolis, IN", "capacity": 15000, "currentUtilization": 61, "type": "Cold Storage", "manager": "Tom Brennan", "active": true },
+    { "name": "Southeast Dry Goods", "code": "WH-SE", "address": "600 Logistics Pkwy", "city": "Charlotte, NC", "capacity": 35000, "currentUtilization": 48, "type": "Dry Storage", "manager": "Keisha Williams", "active": true },
+    { "name": "Texas Cross-Dock Facility", "code": "WH-TX", "address": "4100 Gateway Blvd", "city": "Dallas, TX", "capacity": 20000, "currentUtilization": 33, "type": "Cross-Dock", "manager": "Carlos Reyes", "active": true }
+  ],
+  "StockMovement": [
+    { "referenceNumber": "SM-2026-0301", "productSku": "ELC-HDPH-001", "type": "Inbound", "quantity": 500, "fromWarehouse": "", "toWarehouse": "WH-EAST", "date": "2026-03-01", "reason": "PO-4521 received from Shenzhen Audio Co" },
+    { "referenceNumber": "SM-2026-0302", "productSku": "ELC-HDPH-001", "type": "Transfer", "quantity": 200, "fromWarehouse": "WH-EAST", "toWarehouse": "WH-WEST", "date": "2026-03-03", "reason": "Restock West Coast to meet Q1 demand" },
+    { "referenceNumber": "SM-2026-0303", "productSku": "CLT-TSHRT-010", "type": "Outbound", "quantity": 1200, "fromWarehouse": "WH-WEST", "toWarehouse": "", "date": "2026-03-05", "reason": "Order batch #B-7890 shipped to Amazon FBA" },
+    { "referenceNumber": "SM-2026-0304", "productSku": "FNB-CFEE-005", "type": "Inbound", "quantity": 300, "fromWarehouse": "", "toWarehouse": "WH-COLD", "date": "2026-03-08", "reason": "Monthly restock from Café del Sol Roasters" },
+    { "referenceNumber": "SM-2026-0305", "productSku": "ELC-SPKR-003", "type": "Return", "quantity": 15, "fromWarehouse": "", "toWarehouse": "WH-EAST", "date": "2026-03-10", "reason": "Customer returns, units to be inspected and refurbished" },
+    { "referenceNumber": "SM-2026-0306", "productSku": "RAW-POLY-020", "type": "Adjustment", "quantity": -120, "fromWarehouse": "WH-SE", "toWarehouse": "", "date": "2026-03-12", "reason": "Cycle count correction, shrinkage identified" },
+    { "referenceNumber": "SM-2026-0307", "productSku": "PKG-BOX-015", "type": "Inbound", "quantity": 5000, "fromWarehouse": "", "toWarehouse": "WH-WEST", "date": "2026-03-14", "reason": "Bulk packaging order from Georgia-Pacific" }
+  ],
+  "Supplier": [
+    { "name": "Shenzhen Audio Co", "contactPerson": "Wei Zhang", "email": "wzhang@shenzhen-audio.cn", "phone": "+86-755-555-0188", "category": "Manufacturer", "leadTimeDays": 35, "rating": "Gold", "paymentTerms": "Net 30", "notes": "Primary headphone and speaker supplier, ISO 9001 certified" },
+    { "name": "Café del Sol Roasters", "contactPerson": "Maria Gutierrez", "email": "orders@cafedelsol.co", "phone": "305-555-0144", "category": "Manufacturer", "leadTimeDays": 7, "rating": "Gold", "paymentTerms": "Net 15", "notes": "Direct trade Colombian coffee, consistent quality" },
+    { "name": "Georgia-Pacific", "contactPerson": "Sales Dept", "email": "orders@gp.com", "phone": "800-555-0100", "category": "Wholesaler", "leadTimeDays": 5, "rating": "Silver", "paymentTerms": "Net 30", "notes": "Packaging and paper products, high volume discounts" },
+    { "name": "Apex Textile Mills", "contactPerson": "Raj Patel", "email": "raj@apextextile.in", "phone": "+91-22-555-0155", "category": "Manufacturer", "leadTimeDays": 45, "rating": "Silver", "paymentTerms": "Net 60", "notes": "Cotton garment supplier, MOQ 1000 units per style" },
+    { "name": "Lone Star Polymer Corp", "contactPerson": "Billy Crawford", "email": "bcrawford@lonestarpolymer.com", "phone": "713-555-0167", "category": "Distributor", "leadTimeDays": 3, "rating": "Gold", "paymentTerms": "Net 15", "notes": "Domestic resin supplier, next-day delivery available in TX" },
+    { "name": "TechParts Direct", "contactPerson": "Susan Lee", "email": "slee@techpartsdirect.com", "phone": "408-555-0199", "category": "Distributor", "leadTimeDays": 2, "rating": "Silver", "paymentTerms": "COD", "notes": "Electronics components and accessories, small batch friendly" }
+  ]
+}

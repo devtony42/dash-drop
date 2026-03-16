@@ -1,0 +1,61 @@
+{
+  "entities": [
+    {
+      "name": "Employee",
+      "icon": "UserCheck",
+      "fields": [
+        { "name": "name", "type": "string", "required": true, "searchable": true },
+        { "name": "email", "type": "string", "required": true, "searchable": true },
+        { "name": "phone", "type": "string" },
+        { "name": "department", "type": "string", "required": true, "searchable": true },
+        { "name": "title", "type": "string", "searchable": true },
+        { "name": "status", "type": "enum", "options": ["Active", "On Leave", "Probation", "Terminated"], "required": true, "default": "Active" },
+        { "name": "type", "type": "enum", "options": ["Full-Time", "Part-Time", "Contract", "Intern"], "required": true },
+        { "name": "startDate", "type": "date", "required": true },
+        { "name": "salary", "type": "number" },
+        { "name": "manager", "type": "string" }
+      ]
+    },
+    {
+      "name": "Department",
+      "icon": "Building2",
+      "fields": [
+        { "name": "name", "type": "string", "required": true, "searchable": true },
+        { "name": "code", "type": "string", "required": true, "searchable": true },
+        { "name": "head", "type": "string", "searchable": true },
+        { "name": "headcount", "type": "number" },
+        { "name": "budget", "type": "number" },
+        { "name": "location", "type": "enum", "options": ["HQ - New York", "West - San Francisco", "South - Austin", "Remote"], "required": true },
+        { "name": "status", "type": "enum", "options": ["Active", "Restructuring", "Closed"], "default": "Active" }
+      ]
+    },
+    {
+      "name": "LeaveRequest",
+      "icon": "CalendarOff",
+      "fields": [
+        { "name": "employeeName", "type": "string", "required": true, "searchable": true },
+        { "name": "type", "type": "enum", "options": ["Vacation", "Sick", "Personal", "Parental", "Bereavement", "Jury Duty"], "required": true },
+        { "name": "startDate", "type": "date", "required": true },
+        { "name": "endDate", "type": "date", "required": true },
+        { "name": "days", "type": "number", "required": true },
+        { "name": "status", "type": "enum", "options": ["Pending", "Approved", "Denied", "Cancelled"], "required": true, "default": "Pending" },
+        { "name": "approver", "type": "string" },
+        { "name": "reason", "type": "text" }
+      ]
+    },
+    {
+      "name": "Review",
+      "icon": "ClipboardCheck",
+      "fields": [
+        { "name": "employeeName", "type": "string", "required": true, "searchable": true },
+        { "name": "reviewer", "type": "string", "required": true, "searchable": true },
+        { "name": "period", "type": "enum", "options": ["Q1 2026", "Q2 2026", "Q3 2026", "Q4 2026", "Annual 2025", "Annual 2026"], "required": true },
+        { "name": "type", "type": "enum", "options": ["Quarterly", "Annual", "Probation", "360 Feedback", "Self-Assessment"], "required": true },
+        { "name": "rating", "type": "enum", "options": ["Exceeds Expectations", "Meets Expectations", "Needs Improvement", "Unsatisfactory"], "required": true },
+        { "name": "completedDate", "type": "date" },
+        { "name": "status", "type": "enum", "options": ["Scheduled", "In Progress", "Completed", "Acknowledged"], "required": true, "default": "Scheduled" },
+        { "name": "summary", "type": "text" }
+      ]
+    }
+  ]
+}

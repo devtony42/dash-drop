@@ -1,0 +1,55 @@
+{
+  "entities": [
+    {
+      "name": "Contact",
+      "icon": "Users",
+      "fields": [
+        { "name": "name", "type": "string", "required": true, "searchable": true },
+        { "name": "email", "type": "string", "required": true, "searchable": true },
+        { "name": "phone", "type": "string" },
+        { "name": "company", "type": "string", "searchable": true },
+        { "name": "status", "type": "enum", "options": ["Lead", "Prospect", "Customer", "Churned"], "required": true, "default": "Lead" },
+        { "name": "source", "type": "enum", "options": ["Website", "Referral", "Cold Call", "Trade Show", "Social Media"] },
+        { "name": "notes", "type": "text" }
+      ]
+    },
+    {
+      "name": "Company",
+      "icon": "Building",
+      "fields": [
+        { "name": "name", "type": "string", "required": true, "searchable": true },
+        { "name": "industry", "type": "enum", "options": ["Technology", "Healthcare", "Finance", "Manufacturing", "Retail", "Other"], "required": true },
+        { "name": "website", "type": "string" },
+        { "name": "employees", "type": "number" },
+        { "name": "annualRevenue", "type": "number" },
+        { "name": "address", "type": "text" }
+      ]
+    },
+    {
+      "name": "Deal",
+      "icon": "TrendingUp",
+      "fields": [
+        { "name": "title", "type": "string", "required": true, "searchable": true },
+        { "name": "contactName", "type": "string", "required": true, "searchable": true },
+        { "name": "companyName", "type": "string", "searchable": true },
+        { "name": "stage", "type": "enum", "options": ["Discovery", "Proposal", "Negotiation", "Won", "Lost"], "required": true, "default": "Discovery" },
+        { "name": "value", "type": "number", "required": true },
+        { "name": "closeDate", "type": "date" },
+        { "name": "probability", "type": "number" },
+        { "name": "notes", "type": "text" }
+      ]
+    },
+    {
+      "name": "Activity",
+      "icon": "Activity",
+      "fields": [
+        { "name": "type", "type": "enum", "options": ["Call", "Email", "Meeting", "Note", "Task"], "required": true },
+        { "name": "subject", "type": "string", "required": true, "searchable": true },
+        { "name": "contactName", "type": "string", "required": true, "searchable": true },
+        { "name": "date", "type": "date", "required": true },
+        { "name": "completed", "type": "boolean" },
+        { "name": "notes", "type": "text" }
+      ]
+    }
+  ]
+}

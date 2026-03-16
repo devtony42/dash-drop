@@ -16,7 +16,7 @@
 | 6 | Inline validation messages | Done | Client-side required + server error mapping |
 | 7 | Read-only entity mode | Done | `readOnly: true` schema flag hides CRUD buttons |
 | 8 | JWT auth + RBAC | Done | Login, Admin/Editor/Viewer roles, protected routes, role-aware UI |
-| 9 | Industry templates | Backlog | See below |
+| 9 | Industry templates | Done | 5 templates + seed data in `templates/` |
 | 10 | Stripe / external API integration hooks | Backlog | See below |
 | 11 | Live demo on Render/Railway | Backlog | See below |
 
@@ -79,14 +79,14 @@
 
 ### Bigger Features (3–7 days each)
 
-#### Industry Templates
+#### Industry Templates — DONE
 Ship pre-built `schema.config.json` files that clients can drop in and go:
 - `template-crm.json` — Contacts, Companies, Deals, Activities
 - `template-construction.json` — Projects, Contractors, Materials, Milestones, Invoices
 - `template-inventory.json` — Products, Warehouses, Stock Movements, Suppliers
 - `template-finance.json` — Accounts, Transactions, Budgets, Reports
 - `template-hr.json` — Employees, Departments, Leave Requests, Reviews
-Each template ships with seed data. Stored in `templates/` directory.
+Each template ships with seed data (5-8 records per entity). Stored in `templates/` directory with companion `seed/` files.
 
 #### Stripe / External API Integration Hooks
 - Schema-level `"webhooks"` config block
