@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "node --watch src/index.js",
     "start": "node src/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "generate-prisma": "node src/generate-prisma.js",
     "db:migrate": "npx prisma migrate dev --name init",
     "db:push": "npx prisma db push",
@@ -21,6 +23,8 @@
     "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
-    "prisma": "^6.19.2"
+    "prisma": "^6.19.2",
+    "supertest": "^7.2.2",
+    "vitest": "^2.1.9"
   }
 }
