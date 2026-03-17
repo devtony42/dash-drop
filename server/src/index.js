@@ -27,13 +27,31 @@ app.get('/api/health', (req, res) => {
 // Auth routes
 app.use('/api/auth', authRoutes(prisma));
 
+// Build effective schema (append synthetic Audit Log entity if any entity opts in)
+const hasAuditLog = schemaConfig.entities.some(e => e.auditLog);
+const auditLogEntity = {
+  name: 'AuditLog',
+  displayName: 'Audit Log',
+  icon: 'FileText',
+  readOnly: true,
+  fields: [
+    { name: 'entity', type: 'string', searchable: true },
+    { name: 'recordId', type: 'integer' },
+    { name: 'action', type: 'enum', options: ['CREATE', 'UPDATE', 'DELETE'] },
+    { name: 'userName', type: 'string', searchable: true },
+  ],
+};
+const effectiveSchema = hasAuditLog
+  ? { ...schemaConfig, entities: [...schemaConfig.entities, auditLogEntity] }
+  : schemaConfig;
+
 // Schema config endpoint (for client)
 app.get('/api/schema', authenticate, (req, res) => {
-  res.json(schemaConfig);
+  res.json(effectiveSchema);
 });
 
 // Dynamic CRUD routes for each entity
-for (const entity of schemaConfig.entities) {
+for (const entity of effectiveSchema.entities) {
   const entityName = entity.name;
   const modelName = entityName.charAt(0).toLowerCase() + entityName.slice(1);
   const router = buildCrudRouter(prisma, entityName, modelName, entity);
@@ -42,5 +60,5 @@ for (const entity of schemaConfig.entities) {
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
-  console.log(`Entities loaded: ${schemaConfig.entities.map(e => e.name).join(', ')}`);
+  console.log(`Entities loaded: ${effectiveSchema.entities.map(e => e.name).join(', ')}`);
 });

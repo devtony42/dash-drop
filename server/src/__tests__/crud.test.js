@@ -30,7 +30,10 @@ const mockModel = {
   count:      vi.fn(),
 };
 
+const mockAuditLog = { create: vi.fn() };
+
 const mockPrisma = { contact: mockModel };
+const mockPrismaWithAudit = { contact: mockModel, auditLog: mockAuditLog };
 
 // ── Test entity schema ───────────────────────────────────────────────────────
 const testEntity = {
@@ -43,20 +46,24 @@ const testEntity = {
   ],
 };
 
+const auditedEntity = { ...testEntity, auditLog: true };
+
 // ── JWT helpers ──────────────────────────────────────────────────────────────
 const JWT_SECRET = 'dev-secret-change-me';
 const makeToken = (role = 'Admin') =>
   jwt.sign({ id: 1, email: 'test@test.com', role }, JWT_SECRET, { expiresIn: '1h' });
 
 // ── App factory ──────────────────────────────────────────────────────────────
-function buildApp(role = 'Admin') {
+function buildApp(role = 'Admin', { audited = false } = {}) {
   const app = express();
   app.use(express.json());
   app.use((req, _res, next) => {
     req.headers.authorization = `Bearer ${makeToken(role)}`;
     next();
   });
-  app.use('/api/contacts', authenticate, buildCrudRouter(mockPrisma, 'Contact', 'contact', testEntity));
+  const prisma = audited ? mockPrismaWithAudit : mockPrisma;
+  const entity = audited ? auditedEntity : testEntity;
+  app.use('/api/contacts', authenticate, buildCrudRouter(prisma, 'Contact', 'contact', entity));
   return app;
 }
 
@@ -283,5 +290,91 @@ describe('CRUD routes — /api/contacts', () => {
       const res = await supertest(buildApp()).delete('/api/contacts/1');
       expect(res.status).toBe(500);
     });
+  });
+});
+
+// ── Audit Log tests ───────────────────────────────────────────────────────────
+describe('Audit Log — entities with auditLog: true', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockAuditLog.create.mockResolvedValue({});
+  });
+
+  it('CREATE writes an audit log entry with action=CREATE', async () => {
+    mockModel.create.mockResolvedValue({ ...sampleRecord, id: 2 });
+
+    const res = await supertest(buildApp('Admin', { audited: true }))
+      .post('/api/contacts')
+      .send({ name: 'Bob', email: 'bob@example.com', status: 'Lead' });
+
+    expect(res.status).toBe(201);
+    expect(mockAuditLog.create).toHaveBeenCalledOnce();
+    expect(mockAuditLog.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        entity: 'Contact',
+        recordId: 2,
+        action: 'CREATE',
+        diff: null,
+      }),
+    });
+  });
+
+  it('UPDATE writes an audit log entry with action=UPDATE and before/after diff', async () => {
+    const updated = { ...sampleRecord, name: 'Alice Updated' };
+    mockModel.findUnique.mockResolvedValue(sampleRecord);
+    mockModel.update.mockResolvedValue(updated);
+
+    const res = await supertest(buildApp('Admin', { audited: true }))
+      .put('/api/contacts/1')
+      .send({ name: 'Alice Updated' });
+
+    expect(res.status).toBe(200);
+    expect(mockAuditLog.create).toHaveBeenCalledOnce();
+    const auditData = mockAuditLog.create.mock.calls[0][0].data;
+    expect(auditData.action).toBe('UPDATE');
+    expect(auditData.diff).toMatchObject({
+      before: expect.objectContaining({ name: 'Alice' }),
+      after:  expect.objectContaining({ name: 'Alice Updated' }),
+    });
+  });
+
+  it('DELETE writes an audit log entry with action=DELETE', async () => {
+    mockModel.delete.mockResolvedValue(sampleRecord);
+
+    const res = await supertest(buildApp('Admin', { audited: true }))
+      .delete('/api/contacts/1');
+
+    expect(res.status).toBe(200);
+    expect(mockAuditLog.create).toHaveBeenCalledOnce();
+    expect(mockAuditLog.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        entity: 'Contact',
+        recordId: 1,
+        action: 'DELETE',
+      }),
+    });
+  });
+
+  it('audit log failure is non-blocking — request still succeeds', async () => {
+    mockModel.create.mockResolvedValue({ ...sampleRecord, id: 3 });
+    mockAuditLog.create.mockRejectedValue(new Error('Audit DB down'));
+
+    const res = await supertest(buildApp('Admin', { audited: true }))
+      .post('/api/contacts')
+      .send({ name: 'Bob', email: 'bob@example.com', status: 'Lead' });
+
+    // Main request still 201 even though audit write threw
+    expect(res.status).toBe(201);
+  });
+
+  it('non-audited entity does NOT write audit log on CREATE', async () => {
+    mockModel.create.mockResolvedValue({ ...sampleRecord, id: 4 });
+
+    const res = await supertest(buildApp('Admin', { audited: false }))
+      .post('/api/contacts')
+      .send({ name: 'Bob', email: 'bob@example.com', status: 'Lead' });
+
+    expect(res.status).toBe(201);
+    expect(mockAuditLog.create).not.toHaveBeenCalled();
   });
 });
