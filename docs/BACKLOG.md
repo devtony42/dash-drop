@@ -108,6 +108,11 @@ Each template ships with seed data (5-8 records per entity). Stored in `template
 
 ---
 
+## Dev Workflow Notes
+- **PR merge strategy:** Consider switching from `--merge` to `--squash` for cleaner linear history (discussed 2026-03-16). Current `--merge` creates slightly noisy duplicate commits in history. One commit per PR is easier to bisect. Decision pending.
+
+---
+
 ## Ideas Parking Lot
 - Markdown field type (rendered in table preview, full editor in form)
 - File/image upload field type (S3-compatible storage backend)
