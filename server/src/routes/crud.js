@@ -178,6 +178,25 @@ function buildCrudRouter(prisma, entityName, modelName, entity) {
       }
 
       const item = await model.create({ data });
+
+      // Audit log
+      if (entity.auditLog && prisma.auditLog) {
+        try {
+          await prisma.auditLog.create({
+            data: {
+              entity: entityName,
+              recordId: item.id,
+              action: 'CREATE',
+              userId: req.user?.id || null,
+              userName: req.user?.name || null,
+              diff: null,
+            },
+          });
+        } catch (auditErr) {
+          console.error('Audit log write failed:', auditErr);
+        }
+      }
+
       res.status(201).json(item);
     } catch (err) {
       console.error(`POST /${modelName}s error:`, err);
@@ -199,10 +218,34 @@ function buildCrudRouter(prisma, entityName, modelName, entity) {
         }
       }
 
+      // Fetch old record for audit diff
+      const before = entity.auditLog && prisma.auditLog
+        ? await model.findUnique({ where: { id: parseInt(req.params.id) } })
+        : null;
+
       const item = await model.update({
         where: { id: parseInt(req.params.id) },
         data,
       });
+
+      // Audit log
+      if (entity.auditLog && prisma.auditLog && before) {
+        try {
+          await prisma.auditLog.create({
+            data: {
+              entity: entityName,
+              recordId: item.id,
+              action: 'UPDATE',
+              userId: req.user?.id || null,
+              userName: req.user?.name || null,
+              diff: { before, after: item },
+            },
+          });
+        } catch (auditErr) {
+          console.error('Audit log write failed:', auditErr);
+        }
+      }
+
       res.json(item);
     } catch (err) {
       console.error(`PUT /${modelName}s/${req.params.id} error:`, err);
@@ -213,9 +256,29 @@ function buildCrudRouter(prisma, entityName, modelName, entity) {
   // DELETE (Admin only)
   router.delete('/:id', authorize('Admin'), async (req, res) => {
     try {
+      const recordId = parseInt(req.params.id);
       await model.delete({
-        where: { id: parseInt(req.params.id) },
+        where: { id: recordId },
       });
+
+      // Audit log
+      if (entity.auditLog && prisma.auditLog) {
+        try {
+          await prisma.auditLog.create({
+            data: {
+              entity: entityName,
+              recordId,
+              action: 'DELETE',
+              userId: req.user?.id || null,
+              userName: req.user?.name || null,
+              diff: null,
+            },
+          });
+        } catch (auditErr) {
+          console.error('Audit log write failed:', auditErr);
+        }
+      }
+
       res.json({ message: `${entityName} deleted` });
     } catch (err) {
       res.status(500).json({ error: `Failed to delete ${entityName}` });

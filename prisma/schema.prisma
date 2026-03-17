@@ -40,3 +40,16 @@ model Order {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  entity    String
+  recordId  Int
+  action    String
+  userId    Int?
+  userName  String?
+  diff      Json?
+  createdAt DateTime @default(now())
+
+  @@map("_AuditLog")
+}

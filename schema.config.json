@@ -3,6 +3,7 @@
     {
       "name": "Contact",
       "icon": "Users",
+      "auditLog": true,
       "fields": [
         { "name": "name", "type": "string", "required": true, "searchable": true },
         { "name": "email", "type": "string", "required": true, "searchable": true },

@@ -64,6 +64,23 @@ model User {
     schema += `}\n`;
   }
 
+  // Static _AuditLog model (used when any entity has auditLog: true)
+  const hasAuditLog = config.entities.some(e => e.auditLog);
+  if (hasAuditLog) {
+    schema += `\nmodel AuditLog {\n`;
+    schema += `  id        Int      @id @default(autoincrement())\n`;
+    schema += `  entity    String\n`;
+    schema += `  recordId  Int\n`;
+    schema += `  action    String\n`;
+    schema += `  userId    Int?\n`;
+    schema += `  userName  String?\n`;
+    schema += `  diff      Json?\n`;
+    schema += `  createdAt DateTime @default(now())\n`;
+    schema += `\n`;
+    schema += `  @@map("_AuditLog")\n`;
+    schema += `}\n`;
+  }
+
   return schema;
 }
 
