@@ -83,7 +83,7 @@ export default function Layout({ children }) {
                 onClick={() => setSidebarOpen(false)}
               >
                 <Icon className="h-4 w-4" />
-                {entity.name}s
+                {entity.displayName || `${entity.name}s`}
               </Link>
             );
           })}
