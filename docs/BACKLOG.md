@@ -4,125 +4,6 @@
 
 ---
 
-## Roadmap
-
-| # | Feature | Status | Notes |
-|---|---------|--------|-------|
-| 1 | Core CRUD frontend (React + Vite) | Done | Dynamic table, forms, search, filters, pagination |
-| 2 | Express REST API with Prisma | Done | Auto-generated routes per entity, coercion, validation |
-| 3 | Docker Compose full-stack wiring | Done | Postgres + API + client, one-command startup |
-| 4 | CSV export | Done | Per-entity export respecting current filters/search |
-| 5 | Column visibility toggle | Done | Per-entity localStorage persistence |
-| 6 | Inline validation messages | Done | Client-side required + server error mapping |
-| 7 | Read-only entity mode | Done | `readOnly: true` schema flag hides CRUD buttons |
-| 8 | JWT auth + RBAC | Done | Login, Admin/Editor/Viewer roles, protected routes, role-aware UI |
-| 9 | Industry templates | Done | 5 templates + seed data in `templates/` |
-| 10 | Stripe / external API integration hooks | Backlog | See below |
-| 11 | Live demo on Render/Railway | Backlog | See below |
-
----
-
-## Backlog
-
-### Quick Wins (< 1 day each)
-
-#### CSV Export — DONE
-- `GET /api/:entity/export` endpoint — respects active search + filters
-- "Export CSV" button in EntityList header
-- Proper Content-Disposition header, RFC-4180 compliant output
-- Handles all field types (dates formatted, booleans as True/False)
-
-#### Column Visibility Toggle — DONE
-- User can show/hide columns from the table
-- State saved to localStorage per entity (`dash-drop-cols-${entity.name}`)
-- Useful for entities with many fields
-
-#### Inline Validation Messages — DONE
-- Client-side required field validation with red border + error message
-- Server-side errors mapped back to individual fields
-- Errors clear on field change
-
-#### Read-Only Entity Mode — DONE
-- `"readOnly": true` flag in schema entity definition
-- Hides Add/Edit/Delete buttons for that entity
-- Useful for audit logs, imported data, reference tables
-
----
-
-### Medium Lift (1–3 days each)
-
-#### Role-Based Access Control (RBAC) — DONE
-- JWT-based authentication with bcrypt passwords
-- Three roles: Admin (full access), Editor (read + write), Viewer (read-only)
-- Login page with demo credentials
-- Protected API routes with role-based authorization
-- Remaining: per-entity role overrides, password reset
-
-#### Entity Relationships (FK Support)
-- Schema: `{ "name": "categoryId", "type": "relation", "entity": "Category" }`
-- API: auto-join related entity on GET list/single
-- UI: dropdown select populated from related entity on forms
-- Display: show related record name (not just ID) in table
-
-#### Bulk Actions
-- Checkbox column in table
-- "Delete selected" bulk action
-- "Export selected" (subset of CSV export)
-- Extensible action menu for future custom actions
-
-#### Audit Log
-- Optional per-entity: `"auditLog": true`
-- Records who changed what and when (create/update/delete)
-- Stored in a `_AuditLog` table, viewable as a read-only entity in the dashboard
-
----
-
-### Bigger Features (3–7 days each)
-
-#### Industry Templates — DONE
-Ship pre-built `schema.config.json` files that clients can drop in and go:
-- `template-crm.json` — Contacts, Companies, Deals, Activities
-- `template-construction.json` — Projects, Contractors, Materials, Milestones, Invoices
-- `template-inventory.json` — Products, Warehouses, Stock Movements, Suppliers
-- `template-finance.json` — Accounts, Transactions, Budgets, Reports
-- `template-hr.json` — Employees, Departments, Leave Requests, Reviews
-Each template ships with seed data (5-8 records per entity). Stored in `templates/` directory with companion `seed/` files.
-
-#### Stripe / External API Integration Hooks
-- Schema-level `"webhooks"` config block
-- On record create/update/delete, fire configured webhook URLs
-- Built-in Stripe integration: `"stripeSync": true` on entity auto-creates/updates Stripe Customer on Contact create
-- Generic outbound webhooks (Zapier, Make, n8n compatible)
-
-#### Live Demo on Render/Railway
-- `render.yaml` / `railway.json` one-click deploy config
-- Demo instance at `demo.dash-drop.dev` running CRM template
-- "Deploy your own" button in README
-- Free tier compatible (sleep on idle OK for demo)
-
-#### Schema UI Builder
-- Visual drag-and-drop schema editor in the dashboard
-- Generate/edit `schema.config.json` without touching JSON
-- Preview changes live before applying
-- Export schema as downloadable file
-
----
-
-## Dev Workflow Notes
-- **PR merge strategy: `--squash` ✅** All PRs merged to `main` via squash. One commit per PR, clean linear history, easy to bisect. Decided 2026-03-17.
-
----
-
-## Ideas Parking Lot
-- Markdown field type (rendered in table preview, full editor in form)
-- File/image upload field type (S3-compatible storage backend)
-- GraphQL API option alongside REST
-- Plugin system for custom field types
-- CLI: `npx dash-drop init` scaffolds a new project with template picker
-- Multi-tenant: one instance, multiple schemas/databases
-
----
-
 ## Version Targets
 
 | Version | Goal |
@@ -130,5 +11,138 @@ Each template ships with seed data (5-8 records per entity). Stored in `template
 | v0.1 | MVP — schema-driven CRUD, Docker, demo data |
 | v0.2 | CSV export + inline validation + column toggle + read-only mode |
 | v0.3 | RBAC + relationships (v2 architecture) |
-| v0.4 | Industry templates + live demo |
-| v1.0 | Stripe hooks + audit log + schema UI builder |
+| v0.4 | Industry templates + audit log + CI |
+| v0.5 | Live demo + entity relationships + bulk actions |
+| v1.0 | Stripe hooks + schema UI builder + password reset |
+
+---
+
+## Roadmap
+
+| # | Feature | Status | Notes |
+|---|---------|--------|-------|
+| 1 | Core CRUD frontend (React + Vite) | ✅ Done | Dynamic table, forms, search, filters, pagination |
+| 2 | Express REST API with Prisma | ✅ Done | Auto-generated routes per entity, coercion, validation |
+| 3 | Docker Compose full-stack wiring | ✅ Done | Postgres + API + client, one-command startup |
+| 4 | CSV export | ✅ Done | Per-entity export respecting current filters/search |
+| 5 | Column visibility toggle | ✅ Done | Per-entity localStorage persistence |
+| 6 | Inline validation messages | ✅ Done | Client-side required + server error mapping |
+| 7 | Read-only entity mode | ✅ Done | `readOnly: true` schema flag hides CRUD buttons |
+| 8 | JWT auth + RBAC | ✅ Done | Login, Admin/Editor/Viewer roles, protected routes, role-aware UI |
+| 9 | Industry templates | ✅ Done | 5 templates + seed data in `templates/` |
+| 10 | Audit log | ✅ Done | `auditLog: true` schema flag, read-only _AuditLog entity in dashboard |
+| 11 | CI workflow + Vitest test suites | ✅ Done | Server + client test suites, GitHub Actions |
+| 12 | Render.com one-click deploy | ✅ Done | `render.yaml` wires DB + API + static client |
+| 13 | Entity relationships (FK support) | 🔲 Next | See below — highest value unlock |
+| 14 | Live demo on Render | 🔲 Quick win | render.yaml is done, just needs deploying |
+| 15 | Bulk actions | 🔲 Backlog | Checkbox select + delete/export selected |
+| 16 | Stripe / external webhook hooks | 🔲 Backlog | Schema-level webhook config |
+| 17 | Schema UI builder | 🔲 v1.0 | Visual drag-and-drop schema editor |
+| 18 | Password reset / user management UI | 🔲 Backlog | Admin panel for managing users |
+| 19 | Per-entity role overrides | 🔲 Backlog | RBAC remaining: entity-level access control |
+| 20 | `integer` field type fix | 🔲 Bug | generate-prisma maps `integer` → `Int` but crud.js coerces with `parseFloat` — should be `parseInt` |
+| 21 | Dark mode toggle (client) | 🔲 Gap | In SPEC but not confirmed shipped — verify |
+| 22 | `displayName` support in UI | 🔲 Polish | Schema supports `displayName` on entity; UI may not use it everywhere |
+| 23 | `npx dash-drop init` CLI scaffolder | 🔲 Ideas | Template picker + project scaffold via npx |
+| 24 | Markdown field type | 🔲 Ideas | Rendered preview in table, full editor in form |
+| 25 | File/image upload field type | 🔲 Ideas | S3-compatible storage backend |
+| 26 | GraphQL API option | 🔲 Ideas | Alongside REST |
+| 27 | Multi-tenant support | 🔲 Ideas | One instance, multiple schemas/databases |
+
+---
+
+## Priority Queue (what to do next)
+
+### 🔴 P0 — Do First
+**Entity Relationships (FK Support)**
+Real-world schemas hit a wall without this. Every industry template has implicit FKs (Deal → Contact, Invoice → Project, etc.) that are currently unlinked.
+- Schema: `{ "name": "contactId", "type": "relation", "entity": "Contact" }`
+- API: auto-join on GET list/single, include related record in response
+- UI: dropdown select from related entity on forms; show related name (not raw ID) in table
+- Prisma: generate proper `@relation` fields in schema
+
+### 🟡 P1 — High Value, Low Effort
+
+**Deploy the Live Demo**
+`render.yaml` is already merged. This is just: push to Render, get a URL, add screenshot to README.
+- Target URL: `demo.dash-drop.dev` (or whatever Render gives)
+- Swap README "Deploy to Render" button to point to the real demo
+- Add screenshots (the single highest-impact README improvement)
+
+**Bug Fix: `integer` type coercion**
+`generate-prisma.js` maps `integer` → Prisma `Int`, but `crud.js:buildWhereClause` uses `parseFloat`. Small fix, correctness matters.
+
+**Per-entity role overrides**
+RBAC is in place at the global level. Per-entity `"roles": { "create": ["admin"], "read": ["viewer", "editor", "admin"] }` is a natural extension that clients will ask for.
+
+### 🟠 P2 — Medium Lift
+
+**Bulk Actions**
+- Checkbox column in table
+- "Delete selected" + "Export selected" bulk actions
+- Extensible action menu for future custom actions
+
+**User Management UI**
+Currently users are seeded. Need an admin panel to create/reset/delete users. The register endpoint exists (`POST /api/auth/register`) — just needs a frontend.
+
+**Password Reset**
+Mentioned in RBAC "remaining" notes. Needs: forgot password flow, email delivery (or at least admin reset).
+
+**`displayName` + `icon` usage audit**
+Schema supports `displayName` and `icon` on entities. Audit whether the client actually uses `displayName` in the sidebar/page titles vs just `name`.
+
+### 🟢 P3 — Future / Ideas Parking
+
+**Stripe / External Webhook Hooks**
+Schema-level `"webhooks"` config block. On create/update/delete, fire configured URLs. Built-in Stripe Customer sync option.
+
+**Schema UI Builder**
+Visual drag-and-drop schema editor. Generate/edit `schema.config.json` without touching JSON. Preview changes live. This is a product differentiator.
+
+**`npx dash-drop init` CLI**
+Scaffolds a new project with template picker. Lowers the barrier from "clone and edit" to "npx and go."
+
+**Markdown field type**
+Rendered in table preview, full editor in form.
+
+**File/image upload field type**
+S3-compatible storage backend (Cloudflare R2 / AWS S3).
+
+**GraphQL API option**
+Alongside REST for power users.
+
+**Multi-tenant**
+One instance, multiple schemas/databases.
+
+---
+
+## Bugs & Technical Debt
+
+| # | Issue | Priority |
+|---|-------|----------|
+| 1 | `integer` field type uses `parseFloat` in filter coercion — should be `parseInt` | P1 |
+| 2 | `JWT_SECRET` defaults to `'dev-secret-change-me'` — warning in logs would help | P2 |
+| 3 | `POST /api/auth/register` is open in dev — should require admin auth in prod | P2 |
+| 4 | Vitest tests use CJS bridge (`createRequire`) — migrate server to ESM or add proper vitest CJS config | P3 |
+| 5 | No `.env.example` validation — server silently starts with missing vars | P3 |
+
+---
+
+## Dev Workflow Notes
+- **PR merge strategy: `--squash` ✅** All PRs merged to `main` via squash. One commit per PR, clean linear history. Decided 2026-03-17.
+- **Test command:** `cd server && npm test` (Vitest)
+- **Local start:** `docker compose up` from repo root
+
+---
+
+## Ideas Parking Lot
+*(Unscored — potential future backlog items)*
+- Per-field sort direction icons in table header
+- Saved filter presets (bookmark a filter combination)
+- Dashboard summary cards (counts per entity, recent activity)
+- Activity feed widget using audit log data
+- Embeddable widget mode (iframe-safe, for client portals)
+- Export to Excel (`.xlsx`) in addition to CSV
+- Import from CSV (bulk create)
+- Schema versioning (migration awareness when schema changes)
+- Public read-only share links for specific entity views
