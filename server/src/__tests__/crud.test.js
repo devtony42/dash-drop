@@ -17,7 +17,7 @@ const require = createRequire(import.meta.url);
 const express        = require('express');
 const jwt            = require('jsonwebtoken');
 const supertest      = require('supertest');
-const { buildCrudRouter } = require('../routes/crud.js');
+const { buildCrudRouter, buildInclude } = require('../routes/crud.js');
 const { authenticate }    = require('../middleware/auth.js');
 
 // ── Prisma model mock ────────────────────────────────────────────────────────
@@ -376,5 +376,144 @@ describe('Audit Log — entities with auditLog: true', () => {
 
     expect(res.status).toBe(201);
     expect(mockAuditLog.create).not.toHaveBeenCalled();
+  });
+});
+
+// ── Relation field tests ─────────────────────────────────────────────────────
+const mockDealModel = {
+  findMany:   vi.fn(),
+  findUnique: vi.fn(),
+  create:     vi.fn(),
+  update:     vi.fn(),
+  delete:     vi.fn(),
+  count:      vi.fn(),
+};
+
+const dealEntity = {
+  name: 'Deal',
+  fields: [
+    { name: 'title', type: 'string', required: true, searchable: true },
+    { name: 'contactId', type: 'relation', entity: 'Contact', displayField: 'name', required: true },
+    { name: 'stage', type: 'enum', options: ['Discovery', 'Won'], required: true, default: 'Discovery' },
+    { name: 'value', type: 'number', required: true },
+  ],
+};
+
+const dealPrisma = { deal: mockDealModel };
+
+function buildDealApp(role = 'Admin') {
+  const app = express();
+  app.use(express.json());
+  app.use((req, _res, next) => {
+    req.headers.authorization = `Bearer ${makeToken(role)}`;
+    next();
+  });
+  app.use('/api/deals', authenticate, buildCrudRouter(dealPrisma, 'Deal', 'deal', dealEntity));
+  return app;
+}
+
+const sampleDeal = {
+  id: 1,
+  title: 'Big Deal',
+  contactId: 1,
+  contact: { id: 1, name: 'Alice' },
+  stage: 'Discovery',
+  value: 10000,
+  createdAt: new Date('2024-01-01T00:00:00Z'),
+  updatedAt: new Date('2024-01-01T00:00:00Z'),
+};
+
+describe('Relation fields — /api/deals', () => {
+  beforeEach(() => { vi.clearAllMocks(); });
+
+  it('buildInclude returns include map for relation fields', () => {
+    const include = buildInclude(dealEntity);
+    expect(include).toEqual({ contact: true });
+  });
+
+  it('buildInclude returns undefined when no relation fields exist', () => {
+    const include = buildInclude(testEntity);
+    expect(include).toBeUndefined();
+  });
+
+  it('GET /api/deals passes include to findMany for auto-join', async () => {
+    mockDealModel.findMany.mockResolvedValue([sampleDeal]);
+    mockDealModel.count.mockResolvedValue(1);
+
+    const res = await supertest(buildDealApp()).get('/api/deals');
+
+    expect(res.status).toBe(200);
+    expect(res.body.data[0]).toMatchObject({
+      title: 'Big Deal',
+      contactId: 1,
+      contact: { id: 1, name: 'Alice' },
+    });
+    expect(mockDealModel.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({ include: { contact: true } })
+    );
+  });
+
+  it('GET /api/deals/:id passes include to findUnique', async () => {
+    mockDealModel.findUnique.mockResolvedValue(sampleDeal);
+
+    const res = await supertest(buildDealApp()).get('/api/deals/1');
+
+    expect(res.status).toBe(200);
+    expect(res.body).toMatchObject({ contact: { name: 'Alice' } });
+    expect(mockDealModel.findUnique).toHaveBeenCalledWith(
+      expect.objectContaining({ include: { contact: true } })
+    );
+  });
+
+  it('POST /api/deals coerces relation field to integer', async () => {
+    mockDealModel.create.mockResolvedValue(sampleDeal);
+
+    const res = await supertest(buildDealApp())
+      .post('/api/deals')
+      .send({ title: 'Big Deal', contactId: '1', stage: 'Discovery', value: '10000' });
+
+    expect(res.status).toBe(201);
+    const createData = mockDealModel.create.mock.calls[0][0].data;
+    expect(createData.contactId).toBe(1);
+    expect(typeof createData.contactId).toBe('number');
+  });
+
+  it('PUT /api/deals/:id coerces relation field to integer', async () => {
+    mockDealModel.update.mockResolvedValue(sampleDeal);
+
+    const res = await supertest(buildDealApp())
+      .put('/api/deals/1')
+      .send({ contactId: '2' });
+
+    expect(res.status).toBe(200);
+    const updateData = mockDealModel.update.mock.calls[0][0].data;
+    expect(updateData.contactId).toBe(2);
+  });
+
+  it('GET /api/deals?contactId=1 filters by relation FK', async () => {
+    mockDealModel.findMany.mockResolvedValue([sampleDeal]);
+    mockDealModel.count.mockResolvedValue(1);
+
+    await supertest(buildDealApp()).get('/api/deals?contactId=1');
+
+    const findCall = mockDealModel.findMany.mock.calls[0][0];
+    expect(findCall.where).toMatchObject({ contactId: 1 });
+  });
+
+  it('GET /api/deals/options returns lightweight records', async () => {
+    mockDealModel.findMany.mockResolvedValue([
+      { id: 1, title: 'Big Deal', stage: 'Discovery', value: 10000 },
+    ]);
+
+    const res = await supertest(buildDealApp()).get('/api/deals/options');
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual([
+      expect.objectContaining({ id: 1, title: 'Big Deal' }),
+    ]);
+    // Options endpoint uses select (no include for relations or text)
+    const findCall = mockDealModel.findMany.mock.calls[0][0];
+    expect(findCall.select).toMatchObject({ id: true, title: true, stage: true, value: true });
+    expect(findCall.select).not.toHaveProperty('contactId');
   });
 });
