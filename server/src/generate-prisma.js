@@ -38,12 +38,32 @@ model User {
 }
 `;
 
+  // First pass: collect reverse relations (for Prisma's required back-references)
+  const reverseRelations = {}; // { targetEntity: [{ fromEntity, fieldName }] }
+  for (const entity of config.entities) {
+    for (const field of entity.fields) {
+      if (field.type === 'relation') {
+        const target = field.entity;
+        if (!reverseRelations[target]) reverseRelations[target] = [];
+        reverseRelations[target].push({ fromEntity: entity.name, fieldName: field.name });
+      }
+    }
+  }
+
   for (const entity of config.entities) {
     const tableName = entity.name;
     schema += `\nmodel ${tableName} {\n`;
     schema += `  id        Int      @id @default(autoincrement())\n`;
 
     for (const field of entity.fields) {
+      if (field.type === 'relation') {
+        // Derive the relation name from the FK field (e.g. contactId → contact)
+        const relationName = field.name.replace(/Id$/, '');
+        const optional = field.required ? '' : '?';
+        schema += `  ${relationName} ${field.entity}${optional} @relation(fields: [${field.name}], references: [id])\n`;
+        schema += `  ${field.name} Int${optional}\n`;
+        continue;
+      }
       const prismaType = fieldTypeToPrisma(field);
       const optional = field.required ? '' : '?';
       let defaultVal = '';
@@ -57,6 +77,18 @@ model User {
         }
       }
       schema += `  ${field.name} ${prismaType}${optional}${defaultVal}\n`;
+    }
+
+    // Add reverse relation fields (Prisma requires both sides)
+    if (reverseRelations[tableName]) {
+      for (const rel of reverseRelations[tableName]) {
+        const lower = rel.fromEntity.charAt(0).toLowerCase() + rel.fromEntity.slice(1);
+        // Simple pluralization: y→ies, otherwise just add s
+        const backName = lower.endsWith('y')
+          ? lower.slice(0, -1) + 'ies'
+          : lower + 's';
+        schema += `  ${backName} ${rel.fromEntity}[]\n`;
+      }
     }
 
     schema += `  createdAt DateTime @default(now())\n`;
