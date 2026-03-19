@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { api } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -8,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 export default function EntityForm({ entity, initialData, onSubmit, onCancel, loading }) {
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
+  const [relationOptions, setRelationOptions] = useState({});
 
   useEffect(() => {
     const data = {};
@@ -23,6 +25,20 @@ export default function EntityForm({ entity, initialData, onSubmit, onCancel, lo
     setFormData(data);
     setErrors({});
   }, [entity, initialData]);
+
+  // Fetch options for relation fields
+  useEffect(() => {
+    const relationFields = entity.fields.filter(f => f.type === 'relation');
+    if (relationFields.length === 0) return;
+
+    for (const field of relationFields) {
+      api.listOptions(field.entity).then(options => {
+        setRelationOptions(prev => ({ ...prev, [field.name]: options }));
+      }).catch(err => {
+        console.error(`Failed to load options for ${field.entity}:`, err);
+      });
+    }
+  }, [entity]);
 
   const handleChange = (name, value) => {
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -69,6 +85,15 @@ export default function EntityForm({ entity, initialData, onSubmit, onCancel, lo
   const fieldError = (name) => errors[name];
   const errorClass = (name) => errors[name] ? 'border-destructive ring-destructive' : '';
 
+  // Label for relation fields: strip "Id" suffix and humanize
+  const fieldLabel = (field) => {
+    let label = field.name;
+    if (field.type === 'relation') {
+      label = label.replace(/Id$/, '');
+    }
+    return label.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {errors._form && (
@@ -80,9 +105,25 @@ export default function EntityForm({ entity, initialData, onSubmit, onCancel, lo
       {entity.fields.map(field => (
         <div key={field.name} className="space-y-2">
           <Label htmlFor={field.name}>
-            {field.name.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())}
+            {fieldLabel(field)}
             {field.required && <span className="text-destructive ml-1">*</span>}
           </Label>
+
+          {field.type === 'relation' && (
+            <Select
+              id={field.name}
+              value={formData[field.name] ?? ''}
+              onChange={e => handleChange(field.name, e.target.value === '' ? '' : parseInt(e.target.value))}
+              className={errorClass(field.name)}
+            >
+              <option value="">Select {field.entity}...</option>
+              {(relationOptions[field.name] || []).map(opt => (
+                <option key={opt.id} value={opt.id}>
+                  {opt[field.displayField] || `${field.entity} #${opt.id}`}
+                </option>
+              ))}
+            </Select>
+          )}
 
           {field.type === 'text' && (
             <Textarea
