@@ -42,7 +42,7 @@
         { "name": "unit", "type": "enum", "options": ["Each", "Linear Ft", "Sq Ft", "Cu Yd", "Ton", "Gallon", "Box"], "required": true },
         { "name": "quantityOnHand", "type": "number" },
         { "name": "reorderPoint", "type": "number" },
-        { "name": "projectName", "type": "string", "searchable": true }
+        { "name": "projectId", "type": "relation", "entity": "Project", "displayField": "name" }
       ]
     },
     {
@@ -50,7 +50,7 @@
       "icon": "Flag",
       "fields": [
         { "name": "title", "type": "string", "required": true, "searchable": true },
-        { "name": "projectName", "type": "string", "required": true, "searchable": true },
+        { "name": "projectId", "type": "relation", "entity": "Project", "displayField": "name", "required": true },
         { "name": "phase", "type": "enum", "options": ["Pre-Construction", "Foundation", "Framing", "MEP Rough-In", "Exterior", "Interior Finish", "Final Inspection", "Closeout"], "required": true },
         { "name": "dueDate", "type": "date", "required": true },
         { "name": "status", "type": "enum", "options": ["Upcoming", "In Progress", "Completed", "Delayed"], "required": true, "default": "Upcoming" },
@@ -63,8 +63,8 @@
       "icon": "FileText",
       "fields": [
         { "name": "invoiceNumber", "type": "string", "required": true, "searchable": true },
-        { "name": "projectName", "type": "string", "required": true, "searchable": true },
-        { "name": "contractorName", "type": "string", "searchable": true },
+        { "name": "projectId", "type": "relation", "entity": "Project", "displayField": "name", "required": true },
+        { "name": "contractorId", "type": "relation", "entity": "Contractor", "displayField": "name" },
         { "name": "amount", "type": "number", "required": true },
         { "name": "status", "type": "enum", "options": ["Draft", "Submitted", "Approved", "Paid", "Disputed"], "required": true, "default": "Draft" },
         { "name": "issueDate", "type": "date", "required": true },
