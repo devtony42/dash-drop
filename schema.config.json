@@ -18,7 +18,7 @@
       "icon": "TrendingUp",
       "fields": [
         { "name": "title", "type": "string", "required": true, "searchable": true },
-        { "name": "contactName", "type": "string", "required": true, "searchable": true },
+        { "name": "contactId", "type": "relation", "entity": "Contact", "displayField": "name", "required": true },
         { "name": "stage", "type": "enum", "options": ["Discovery", "Proposal", "Negotiation", "Won", "Lost"], "required": true, "default": "Discovery" },
         { "name": "value", "type": "number", "required": true },
         { "name": "closeDate", "type": "date" },
@@ -32,7 +32,7 @@
       "fields": [
         { "name": "type", "type": "enum", "options": ["Call", "Email", "Meeting", "Note"], "required": true },
         { "name": "subject", "type": "string", "required": true, "searchable": true },
-        { "name": "contactName", "type": "string", "required": true, "searchable": true },
+        { "name": "contactId", "type": "relation", "entity": "Contact", "displayField": "name", "required": true },
         { "name": "date", "type": "date", "required": true },
         { "name": "notes", "type": "text" }
       ]
