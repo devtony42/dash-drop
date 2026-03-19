@@ -181,7 +181,16 @@ export default function EntityList({ entity }) {
     }
   };
 
-  const formatValue = (field, value) => {
+  const formatValue = (field, value, item) => {
+    if (field.type === 'relation') {
+      // Show the displayField from the included relation object
+      const relationName = field.name.replace(/Id$/, '');
+      const related = item[relationName];
+      if (related && field.displayField) {
+        return related[field.displayField] || `#${value}`;
+      }
+      return value != null ? `#${value}` : '-';
+    }
     if (value === null || value === undefined) return '-';
     if (field.type === 'boolean') {
       return value ? (
@@ -228,17 +237,21 @@ export default function EntityList({ entity }) {
             </Button>
             {showColsPanel && (
               <div className="absolute right-0 top-full z-20 mt-1 w-52 rounded-md border bg-popover p-2 shadow-md">
-                {entity.fields.map(f => (
-                  <label key={f.name} className="flex items-center gap-2 rounded px-2 py-1.5 text-sm hover:bg-muted cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={visibleCols.includes(f.name)}
-                      onChange={() => toggleColumn(f.name)}
-                      className="h-4 w-4 rounded border-input"
-                    />
-                    {f.name.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())}
-                  </label>
-                ))}
+                {entity.fields.map(f => {
+                  const colLabel = (f.type === 'relation' ? f.name.replace(/Id$/, '') : f.name)
+                    .replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
+                  return (
+                    <label key={f.name} className="flex items-center gap-2 rounded px-2 py-1.5 text-sm hover:bg-muted cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={visibleCols.includes(f.name)}
+                        onChange={() => toggleColumn(f.name)}
+                        className="h-4 w-4 rounded border-input"
+                      />
+                      {colLabel}
+                    </label>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -304,17 +317,21 @@ export default function EntityList({ entity }) {
                     ID <SortIcon field="id" />
                   </button>
                 </th>
-                {displayFields.map(field => (
-                  <th key={field.name} className="px-4 py-3 text-left font-medium text-muted-foreground">
-                    <button
-                      onClick={() => handleSort(field.name)}
-                      className="flex items-center gap-1 hover:text-foreground"
-                    >
-                      {field.name.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())}
-                      <SortIcon field={field.name} />
-                    </button>
-                  </th>
-                ))}
+                {displayFields.map(field => {
+                  const label = (field.type === 'relation' ? field.name.replace(/Id$/, '') : field.name)
+                    .replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
+                  return (
+                    <th key={field.name} className="px-4 py-3 text-left font-medium text-muted-foreground">
+                      <button
+                        onClick={() => handleSort(field.name)}
+                        className="flex items-center gap-1 hover:text-foreground"
+                      >
+                        {label}
+                        <SortIcon field={field.name} />
+                      </button>
+                    </th>
+                  );
+                })}
                 {(canEdit || canDelete) && (
                   <th className="px-4 py-3 text-right font-medium text-muted-foreground">Actions</th>
                 )}
@@ -339,7 +356,7 @@ export default function EntityList({ entity }) {
                     <td className="px-4 py-3 text-muted-foreground">{item.id}</td>
                     {displayFields.map(field => (
                       <td key={field.name} className="px-4 py-3">
-                        {formatValue(field, item[field.name])}
+                        {formatValue(field, item[field.name], item)}
                       </td>
                     ))}
                     {(canEdit || canDelete) && (

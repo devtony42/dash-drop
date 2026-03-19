@@ -76,4 +76,9 @@ export const api = {
     const qs = new URLSearchParams(params).toString();
     return request(`/${slug}/export?${qs}`);
   },
+
+  listOptions: (entityName) => {
+    const slug = entityName.charAt(0).toLowerCase() + entityName.slice(1) + 's';
+    return request(`/${slug}/options`);
+  },
 };

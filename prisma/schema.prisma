@@ -17,25 +17,40 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
-model Product {
+model Contact {
   id        Int      @id @default(autoincrement())
   name String
-  sku String
-  price Float
-  category String
-  inStock Boolean? @default(true)
-  description String?
+  email String
+  phone String?
+  company String?
+  status String @default("Lead")
+  notes String?
+  deals Deal[]
+  activities Activity[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Order {
+model Deal {
   id        Int      @id @default(autoincrement())
-  orderNumber String
-  customerName String
-  customerEmail String
-  status String
-  totalAmount Float
+  title String
+  contact Contact @relation(fields: [contactId], references: [id])
+  contactId Int
+  stage String @default("Discovery")
+  value Float
+  closeDate DateTime?
+  notes String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Activity {
+  id        Int      @id @default(autoincrement())
+  type String
+  subject String
+  contact Contact @relation(fields: [contactId], references: [id])
+  contactId Int
+  date DateTime
   notes String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

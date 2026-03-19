@@ -24,6 +24,8 @@ function buildWhereClause(entity, query) {
       where[field.name] = val === 'true';
     } else if (field.type === 'number' || field.type === 'integer') {
       where[field.name] = parseFloat(val);
+    } else if (field.type === 'relation') {
+      where[field.name] = parseInt(val, 10);
     } else if (field.type === 'enum') {
       where[field.name] = val;
     } else {
@@ -34,9 +36,38 @@ function buildWhereClause(entity, query) {
   return where;
 }
 
+function buildInclude(entity) {
+  const include = {};
+  for (const field of entity.fields) {
+    if (field.type === 'relation') {
+      const relationName = field.name.replace(/Id$/, '');
+      include[relationName] = true;
+    }
+  }
+  return Object.keys(include).length > 0 ? include : undefined;
+}
+
 function buildCrudRouter(prisma, entityName, modelName, entity) {
   const router = express.Router();
   const model = prisma[modelName];
+  const include = buildInclude(entity);
+
+  // OPTIONS — lightweight list for relation dropdowns (id + all scalar fields)
+  router.get('/options', async (req, res) => {
+    try {
+      const select = { id: true };
+      for (const field of entity.fields) {
+        if (field.type !== 'relation' && field.type !== 'text') {
+          select[field.name] = true;
+        }
+      }
+      const items = await model.findMany({ orderBy: { id: 'asc' }, select });
+      res.json(items);
+    } catch (err) {
+      console.error(`GET /${modelName}s/options error:`, err);
+      res.status(500).json({ error: `Failed to list ${entityName} options` });
+    }
+  });
 
   // LIST with pagination, search, filters, sort
   router.get('/', async (req, res) => {
@@ -64,6 +95,7 @@ function buildCrudRouter(prisma, entityName, modelName, entity) {
           orderBy,
           skip: (page - 1) * limit,
           take: limit,
+          ...(include && { include }),
         }),
         model.count({ where }),
       ]);
@@ -153,6 +185,7 @@ function buildCrudRouter(prisma, entityName, modelName, entity) {
     try {
       const item = await model.findUnique({
         where: { id: parseInt(req.params.id) },
+        ...(include && { include }),
       });
       if (!item) return res.status(404).json({ error: `${entityName} not found` });
       res.json(item);
@@ -169,7 +202,7 @@ function buildCrudRouter(prisma, entityName, modelName, entity) {
         if (req.body[field.name] !== undefined) {
           let val = req.body[field.name];
           if (field.type === 'number') val = parseFloat(val);
-          if (field.type === 'integer') val = parseInt(val);
+          if (field.type === 'integer' || field.type === 'relation') val = parseInt(val);
           if (field.type === 'boolean') val = Boolean(val);
           data[field.name] = val;
         } else if (field.default !== undefined) {
@@ -177,7 +210,7 @@ function buildCrudRouter(prisma, entityName, modelName, entity) {
         }
       }
 
-      const item = await model.create({ data });
+      const item = await model.create({ data, ...(include && { include }) });
 
       // Audit log
       if (entity.auditLog && prisma.auditLog) {
@@ -212,7 +245,7 @@ function buildCrudRouter(prisma, entityName, modelName, entity) {
         if (req.body[field.name] !== undefined) {
           let val = req.body[field.name];
           if (field.type === 'number') val = parseFloat(val);
-          if (field.type === 'integer') val = parseInt(val);
+          if (field.type === 'integer' || field.type === 'relation') val = parseInt(val);
           if (field.type === 'boolean') val = Boolean(val);
           data[field.name] = val;
         }
@@ -226,6 +259,7 @@ function buildCrudRouter(prisma, entityName, modelName, entity) {
       const item = await model.update({
         where: { id: parseInt(req.params.id) },
         data,
+        ...(include && { include }),
       });
 
       // Audit log
@@ -288,4 +322,4 @@ function buildCrudRouter(prisma, entityName, modelName, entity) {
   return router;
 }
 
-module.exports = { buildCrudRouter };
+module.exports = { buildCrudRouter, buildInclude };
