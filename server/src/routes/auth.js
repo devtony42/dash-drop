@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { JWT_SECRET, authenticate } = require('../middleware/auth');
+const { JWT_SECRET, authenticate, authorize } = require('../middleware/auth');
 
 module.exports = function authRoutes(prisma) {
   const router = express.Router();
@@ -53,8 +53,11 @@ module.exports = function authRoutes(prisma) {
     }
   });
 
-  // Register (admin only in production, open for seed)
-  router.post('/register', async (req, res) => {
+  // Register — open in development, requires Admin auth in production
+  const registerMiddleware =
+    process.env.NODE_ENV === 'production' ? [authenticate, authorize('Admin')] : [];
+
+  router.post('/register', ...registerMiddleware, async (req, res) => {
     try {
       const { email, password, name, role } = req.body;
       if (!email || !password || !name) {
