@@ -2,6 +2,12 @@ const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-me';
 
+if (!process.env.JWT_SECRET) {
+  console.warn(
+    '[dash-drop] WARNING: JWT_SECRET is not set. Using insecure default — set JWT_SECRET in your environment before deploying to production.'
+  );
+}
+
 function authenticate(req, res, next) {
   const header = req.headers.authorization;
   if (!header || !header.startsWith('Bearer ')) {
