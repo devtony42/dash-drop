@@ -22,8 +22,10 @@ function buildWhereClause(entity, query) {
 
     if (field.type === 'boolean') {
       where[field.name] = val === 'true';
-    } else if (field.type === 'number' || field.type === 'integer') {
+    } else if (field.type === 'number') {
       where[field.name] = parseFloat(val);
+    } else if (field.type === 'integer') {
+      where[field.name] = parseInt(val, 10);
     } else if (field.type === 'enum') {
       where[field.name] = val;
     } else {
