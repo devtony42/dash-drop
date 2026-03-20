@@ -87,6 +87,22 @@ export default function Layout({ children }) {
               </Link>
             );
           })}
+
+          {/* Admin-only Users link */}
+          {user?.role === 'Admin' && (
+            <Link
+              to="/users"
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                location.pathname === '/users'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+              }`}
+              onClick={() => setSidebarOpen(false)}
+            >
+              <Users className="h-4 w-4" />
+              Users
+            </Link>
+          )}
         </nav>
 
         <div className="border-t p-4 shrink-0">

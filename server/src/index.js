@@ -5,6 +5,7 @@ const { PrismaClient } = require('@prisma/client');
 const fs = require('fs');
 const path = require('path');
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/users');
 const { authenticate, authorize } = require('./middleware/auth');
 const { buildCrudRouter } = require('./routes/crud');
 
@@ -26,6 +27,9 @@ app.get('/api/health', (req, res) => {
 
 // Auth routes
 app.use('/api/auth', authRoutes(prisma));
+
+// User management routes (Admin only, behind authenticate)
+app.use('/api/users', authenticate, userRoutes(prisma));
 
 // Build effective schema (append synthetic Audit Log entity if any entity opts in)
 const hasAuditLog = schemaConfig.entities.some(e => e.auditLog);
