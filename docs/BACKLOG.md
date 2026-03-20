@@ -120,9 +120,9 @@ One instance, multiple schemas/databases.
 
 | # | Issue | Priority |
 |---|-------|----------|
-| 1 | `integer` field type uses `parseFloat` in filter coercion — should be `parseInt` | P1 |
-| 2 | `JWT_SECRET` defaults to `'dev-secret-change-me'` — warning in logs would help | P2 |
-| 3 | `POST /api/auth/register` is open in dev — should require admin auth in prod | P2 |
+| 1 | `integer` field type uses `parseFloat` in filter coercion — should be `parseInt` | ✅ Fixed (PR #11) |
+| 2 | `JWT_SECRET` defaults to `'dev-secret-change-me'` — warning in logs would help | ✅ Fixed (PR #12) |
+| 3 | `POST /api/auth/register` is open in dev — should require admin auth in prod | ✅ Fixed (PR #13) |
 | 4 | Vitest tests use CJS bridge (`createRequire`) — migrate server to ESM or add proper vitest CJS config | P3 |
 | 5 | No `.env.example` validation — server silently starts with missing vars | P3 |
 
