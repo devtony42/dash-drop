@@ -6,6 +6,7 @@ import Layout from '@/components/Layout';
 import Login from '@/pages/Login';
 import Dashboard from '@/pages/Dashboard';
 import EntityList from '@/pages/EntityList';
+import UsersPage from '@/pages/UsersPage';
 
 function ProtectedRoute({ children }) {
   const { user } = useAuth();
@@ -47,6 +48,7 @@ function AppRoutes() {
             element={<EntityList entity={entity} />}
           />
         ))}
+        <Route path="/users" element={<UsersPage />} />
         <Route path="/login" element={<Navigate to="/" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

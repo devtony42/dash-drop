@@ -35,6 +35,7 @@ export const api = {
   get: (path) => request(path),
   post: (path, data) => request(path, { method: 'POST', body: JSON.stringify(data) }),
   put: (path, data) => request(path, { method: 'PUT', body: JSON.stringify(data) }),
+  patch: (path, data) => request(path, { method: 'PATCH', body: JSON.stringify(data) }),
   delete: (path) => request(path, { method: 'DELETE' }),
 
   login: (email, password) => request('/auth/login', {
@@ -76,4 +77,10 @@ export const api = {
     const qs = new URLSearchParams(params).toString();
     return request(`/${slug}/export?${qs}`);
   },
+
+  // User management
+  listUsers: () => request('/users'),
+  deleteUser: (id) => request(`/users/${id}`, { method: 'DELETE' }),
+  updateUserRole: (id, role) => request(`/users/${id}/role`, { method: 'PATCH', body: JSON.stringify({ role }) }),
+  registerUser: (data) => request('/auth/register', { method: 'POST', body: JSON.stringify(data) }),
 };
