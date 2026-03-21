@@ -41,7 +41,7 @@
 | 18 | Password reset / user management UI | 🔲 Backlog | Admin panel for managing users |
 | 19 | Per-entity role overrides | 🔲 Backlog | RBAC remaining: entity-level access control |
 | 20 | `integer` field type fix | 🔲 Bug | generate-prisma maps `integer` → `Int` but crud.js coerces with `parseFloat` — should be `parseInt` |
-| 21 | Dark mode toggle (client) | 🔲 Gap | In SPEC but not confirmed shipped — verify |
+| 21 | Dark mode toggle (client) | ✅ Done | Fully shipped — ThemeProvider, toggle button, CSS vars, Tailwind `darkMode: 'class'` all in place |
 | 22 | `displayName` support in UI | ✅ Done | `label`/`labelLower`/`labelPlural` derived from `displayName` — used in all UI strings |
 | 23 | `npx dash-drop init` CLI scaffolder | 🔲 Ideas | Template picker + project scaffold via npx |
 | 24 | Markdown field type | 🔲 Ideas | Rendered preview in table, full editor in form |
@@ -124,7 +124,7 @@ One instance, multiple schemas/databases.
 | 2 | `JWT_SECRET` defaults to `'dev-secret-change-me'` — warning in logs would help | ✅ Fixed (PR #12) |
 | 3 | `POST /api/auth/register` is open in dev — should require admin auth in prod | ✅ Fixed (PR #13) |
 | 4 | Vitest tests use CJS bridge (`createRequire`) — migrate server to ESM or add proper vitest CJS config | P3 |
-| 5 | No `.env.example` validation — server silently starts with missing vars | P3 |
+| 5 | No `.env.example` — server silently starts with missing vars | ✅ Fixed (PR #16) — `.env.example` added with all vars documented; README Quick Start updated |
 
 ---
 
