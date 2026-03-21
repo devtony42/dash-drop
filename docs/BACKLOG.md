@@ -42,7 +42,7 @@
 | 19 | Per-entity role overrides | 🔲 Backlog | RBAC remaining: entity-level access control |
 | 20 | `integer` field type fix | 🔲 Bug | generate-prisma maps `integer` → `Int` but crud.js coerces with `parseFloat` — should be `parseInt` |
 | 21 | Dark mode toggle (client) | 🔲 Gap | In SPEC but not confirmed shipped — verify |
-| 22 | `displayName` support in UI | 🔲 Polish | Schema supports `displayName` on entity; UI may not use it everywhere |
+| 22 | `displayName` support in UI | ✅ Done | `label`/`labelLower`/`labelPlural` derived from `displayName` — used in all UI strings |
 | 23 | `npx dash-drop init` CLI scaffolder | 🔲 Ideas | Template picker + project scaffold via npx |
 | 24 | Markdown field type | 🔲 Ideas | Rendered preview in table, full editor in form |
 | 25 | File/image upload field type | 🔲 Ideas | S3-compatible storage backend |

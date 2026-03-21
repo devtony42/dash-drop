@@ -19,6 +19,10 @@ export default function EntityList({ entity }) {
   const { canEdit: roleCanEdit, canDelete: roleCanDelete } = useAuth();
   const canEdit = roleCanEdit && !entity.readOnly;
   const canDelete = roleCanDelete && !entity.readOnly;
+  // Prefer schema displayName for UI labels; fall back to entity.name
+  const label = entity.displayName || entity.name;
+  const labelLower = label.toLowerCase();
+  const labelPlural = entity.displayName ? label : `${label}s`;
   const [data, setData] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, totalPages: 0 });
   const [search, setSearch] = useState('');
@@ -215,7 +219,7 @@ export default function EntityList({ entity }) {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">{entity.displayName || `${entity.name}s`}</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{labelPlural}</h1>
           <p className="text-muted-foreground">
             {pagination.total} total record{pagination.total !== 1 ? 's' : ''}
           </p>
@@ -249,7 +253,7 @@ export default function EntityList({ entity }) {
           {canEdit && (
             <Button size="sm" onClick={() => setShowCreate(true)}>
               <Plus className="mr-2 h-4 w-4" />
-              Add {entity.name}
+              Add {label}
             </Button>
           )}
         </div>
@@ -261,7 +265,7 @@ export default function EntityList({ entity }) {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder={`Search ${entity.name.toLowerCase()}s...`}
+              placeholder={`Search ${labelPlural.toLowerCase()}...`}
               value={search}
               onChange={e => handleSearch(e.target.value)}
               className="pl-9"
@@ -330,7 +334,7 @@ export default function EntityList({ entity }) {
               ) : data.length === 0 ? (
                 <tr>
                   <td colSpan={displayFields.length + 2} className="px-4 py-8 text-center text-muted-foreground">
-                    No {entity.name.toLowerCase()}s found.
+                    No {labelPlural.toLowerCase()} found.
                   </td>
                 </tr>
               ) : (
@@ -405,8 +409,8 @@ export default function EntityList({ entity }) {
       <Dialog open={showCreate} onOpenChange={setShowCreate}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Create {entity.name}</DialogTitle>
-            <DialogDescription>Add a new {entity.name.toLowerCase()} record.</DialogDescription>
+            <DialogTitle>Create {label}</DialogTitle>
+            <DialogDescription>Add a new {labelLower} record.</DialogDescription>
           </DialogHeader>
           <EntityForm
             entity={entity}
@@ -421,8 +425,8 @@ export default function EntityList({ entity }) {
       <Dialog open={!!editItem} onOpenChange={() => setEditItem(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit {entity.name}</DialogTitle>
-            <DialogDescription>Update the {entity.name.toLowerCase()} record.</DialogDescription>
+            <DialogTitle>Edit {label}</DialogTitle>
+            <DialogDescription>Update the {labelLower} record.</DialogDescription>
           </DialogHeader>
           {editItem && (
             <EntityForm
@@ -440,9 +444,9 @@ export default function EntityList({ entity }) {
       <Dialog open={!!deleteItem} onOpenChange={() => setDeleteItem(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete {entity.name}</DialogTitle>
+            <DialogTitle>Delete {label}</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this {entity.name.toLowerCase()}? This action cannot be undone.
+              Are you sure you want to delete this {labelLower}? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
